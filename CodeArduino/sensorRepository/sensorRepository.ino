@@ -210,12 +210,36 @@ int getNextSensorToQuery()
 
 
 /**
+ * Get the next available sensor.
+ *
+ * firstId : Start sensor Id.
+ *
+ * return  : Id of the next available sensor, -1 if none.
+ */ 
+int getNextAvailableSensor(int firstId)
+{
+  if (firstId < 0) 
+    firstId = 0;
+    
+  // Get the next available sensor.
+  for ( ; firstId < MAX_SENSORS; firstId++)
+  {
+    if (sensorTab[firstId] != NULL)
+      return firstId;
+  }
+  
+  // No more sensors available.
+  return -1;
+}
+
+
+/**
  * Change the refresh data frequency of a sensor.
  *
  * sid          : Sensor ID.
  * newFrequency : New sensor refresh rate frequency.
  */ 
-boolean changeDataFrequency(int sid, int newFrequency)
+boolean changeDataFrequencyById(int sid, int newFrequency)
 {
   // Check if sensor exists. 
   if (!(isSensorExists(sid)))
@@ -223,6 +247,18 @@ boolean changeDataFrequency(int sid, int newFrequency)
   sensorTab[sid]->refreshDataFrequency = newFrequency * 1000;
   return true;
   
+}
+
+
+/**
+ * Change the refresh data frequency of a sensor.
+ *
+ * sid          : Sensor ID.
+ * newFrequency : New sensor refresh rate frequency.
+ */ 
+boolean changeDataFrequencyByName(String sname, int newFrequency)
+{
+  return changeDataFrequencyById(getSensorByName(sname), newFrequency);
 }
 
 

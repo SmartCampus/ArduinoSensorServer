@@ -30,9 +30,11 @@ String execCommand(String cmd)
   // Store command to process.
   theCommand = cmd;
   theCommand.trim();
+  readIndex = 0;
   
   // Get command name. 
   String commandName = nextToken();
+  Serial.print("Command name : "); Serial.println(commandName);
   if (commandName == NULL)
     return NO_COMMAND;
   
@@ -53,40 +55,46 @@ String execCommand(String cmd)
       return INVALID_PARAM;
     
     // Add the new sensor and return.
-    addSensor(sname, pinNumber, frequency, true);
-    return OK_COMMAND;
-    
+    addSensor(sname, pinNumber, frequency, true); 
   }
+  
   else if (commandName.equals("del"))
   {
     // Get sensor name.
     String sname = nextToken();
     
-    // Get pin number.
-    int pinNumber = sname.toInt();
-    
-    // Delete the sensor (from name or ID).
-    if (pinNumber == 0)
-      deleteByName(sname);
-    deleteById(pinNumber);   
-    return OK_COMMAND;
+    // Delete the sensor (by name).
+    deleteByName(sname);   
   }
-  else if (commandName.equals("changeFreq"))
+  
+  else if (commandName.equals("freq"))
   {
     // Get the pin number. 
-    int pinNumber = nextTokenInt();
+    String sname = nextToken();
     
     // Get the new frequency.
     int newFrequency = nextTokenInt();
     
     // Change the data refresh rate. 
-    changeDataFrequency(pinNumber, newFrequency);
-    return OK_COMMAND;   
+    changeDataFrequencyByName(sname, newFrequency);  
   }
+  
+  else if (commandName.equals("list"))
+  {
+    int sid = 0;
+    while ((sid = getNextAvailableSensor(sid)) >= 0)
+    {
+      Serial.print(getSensorName(sid)); Serial.print(" "); Serial.print(sid); Serial.print(" "); Serial.print(getSensorFrequency(sid)); Serial.println();
+      sid++;
+    }   
+  }
+  
   else 
   {
     return "Unknown command."; 
   }
+  
+  return OK_COMMAND;
 }
 
 

@@ -9,7 +9,6 @@ void queryAllSensors()
   int sid; 
   while ((sid = getNextSensorToQuery()) >= 0)
   {
-    Serial.print("Time : "); Serial.println(millis());
     refreshSensorData(sid);
     updateNextSensorTime(sid);
   }
