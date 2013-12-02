@@ -19,7 +19,7 @@ Pour exécuter une commande sur la plate-forme Arduino, il faut pour le moment s
 4. uploader le programme sur une plate-forme Arduino, 
 5. ouvrir le moniteur série de votre Arduino en pressant &lt;ctrl+shift+m>.
 
-Il sera très prochainement possible de passer par le moniteur série de la plate-forme Arduino pour exécuter vos commandes. 
+Il est également possible de passer par le moniteur série de la plate-forme Arduino pour exécuter vos commandes. 
 Pour cela, il faut suivre le cheminement suivant : 
 
 1. Ouvrir le dossier sensorRepository et double cliquer sur le fichier sensorRepository.ino, 
@@ -27,6 +27,7 @@ Pour cela, il faut suivre le cheminement suivant :
 3. ouvrir le moniteur série de votre Arduino en pressant &lt;ctrl+shit+m>,
 4. taper une commande (au format de la liste ci-dessus) dans la zone de saisie du moniteur série et cliquer sur "Send".
 
+Attention à ne pas taper les commandes trop vite sur le moniteur de série ni à les envoyer trop rapidement, il semblerait qu'il ne soit pas capable de les lire correctement. 
 
 Ajouter de nouvelles commandes
 -------
