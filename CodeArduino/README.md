@@ -10,7 +10,6 @@ Les commandes actuellement disponibles, ainsi que leur syntaxe, sont les suivant
 * __del__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName> | &lt;pinNumber>
 * __changeFreq__ &lt;sensorName> &lt;newFrequency>
 * __getSensors__
-* 
 
 Description des paramètres 
 --------
