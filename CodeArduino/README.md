@@ -7,7 +7,7 @@ Liste des commandes disponibles
 Les commandes actuellement disponibles, ainsi que leur syntaxe, sont les suivantes : 
 
 * __add__ &lt;sensorName> &lt;pinNumber> &lt;refreshDataFrequency>
-* __del__ &nbsp;&lt;sensorName> | &lt;pinNumber>
+* __del__ &nbsp;&lt;sensorName> 
 * __freq__ &lt;sensorName> &lt;newFrequency>
 * __list__
 
@@ -65,6 +65,7 @@ Tests réalisés
 -------
 
 ###Test #1 : Ajout d'un capteur à l'Arduino
+_La méthode °1 (passage par le code) ne sera plus détaillée dans les autres tests._
 
 __Méthode °1 (passage direct par le code) :__ 
 
@@ -81,4 +82,41 @@ __Méthode °2 (saisie de la commande sur le moniteur série) :__
 3. ouvrir le moniteur série de l'Arduino en pressant &lt;ctrl+shift+m>,
 4. taper la commande add (au format indiqué ci-dessus) avec les paramètres de votre choix dans la zone de saisie du moniteur et clicker sur "Send".
 
-Attention à indiquer le bon pin de branchement du capteur, sinon la plate-forme renverra des valeurs erronées. 
+Attention à indiquer le bon pin de branchement du capteur, sinon la plate-forme renverra des valeurs erronées.
+Un capteur a été préalablement ajouté pour les besoins de la démonstration. Vous pouvez bien évidemment en ajouter d'autres.
+
+__Codes de retour :__ 
+1. Command OK si la commande est valide.
+2. Invalid parameters si la commande est bien lue mais n'a pas les paramètres correspondants où si ils n'existent pas. 
+3. Invalid command, si la commande est erronée.
+
+###Test #2 : Suppression d'un capteur existant de l'Arduino 
+
+1. En passant par le moniteur série, utiliser la méthode précédente pour ajouter un nouveau capteur à l'Arduino. 
+2. Utiliser la commande del (au format indiqué plus haut) pour supprimer le capteur de votre choix (son nom en paramètre) et clicker sur "Send". 
+
+__Codes de retour :__
+1. Command OK si la commande est valide.
+2. Invalid parameters si la commande est bien lue mais n'a pas les paramètres correspondants où si ils n'existent pas. 
+3. Invalid command, si la commande est erronée.
+
+###Test #3 : Utilisant de la commande freq pour changer la fréquence de rafraichissement des capteurs
+
+1. En passant par le moniteur série, utiliser la méthode précédente pour ajouter un nouveau capteur, ou se baser sur le capteur déjà présent. 
+2. Utiliser la méthode freq (avec le nom du capteur de votre choix et sa nouvelle fréquence en secondes) pour changer la fréquence du capteur.
+
+__Codes de retour :__
+1. Command OK si la commande est valide.
+2. Invalid parameters si la commande est bien lue mais n'a pas les paramètres correspondants où si ils n'existent pas.
+3. Invalid command, si la commande est erronée.
+
+###Test #4 : Utilisation de la commande list pour visualiser les capteurs
+
+1. En passant par le moniteur série, utiliser la commande list (sans paramètre) pour imprimer sur la sortie série le nom des capteurs actuels, le pin où ils sont branchés et leur fréquence de rafraichissement. 
+2. Ajouter, supprimer, changer la fréquence des capteurs, puis utiliser la commande list pour visualiser le bon déroulement des commandes. 
+
+__Codes de retour :__
+1. Command OK si la commande est valide.
+2. Invalid command, si la commande est erronée.
+3. Tous les capteurs présents dans le tableau et les informations les concernants. 
+
