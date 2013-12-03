@@ -103,7 +103,7 @@ __Codes de retour :__
 ###Test #3 : Utilisant de la commande freq pour changer la fréquence de rafraichissement des capteurs
 
 1. En passant par le moniteur série, utiliser la méthode précédente pour ajouter un nouveau capteur, ou se baser sur le capteur déjà présent. 
-2. Utiliser la méthode freq (avec le nom du capteur de votre choix et sa nouvelle fréquence en secondes) pour changer la fréquence du capteur.
+2. Utiliser la commande freq (avec le nom du capteur de votre choix et sa nouvelle fréquence en secondes) pour changer la fréquence du capteur.
 
 __Codes de retour :__
 * Command OK si la commande est valide.
