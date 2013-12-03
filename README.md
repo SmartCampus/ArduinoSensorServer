@@ -27,6 +27,8 @@ Description des commandes
 * __freq :__ Change la fréquence d'envoi des données d'un capteurs existant et branché sur une plate-forme Arduino.
 * __list :__ Récupère la liste de tous les capteurs branchés à la plate-forme Arduino et la transmet à l'utilisateur.
 
+Attention, il n'est possible que de récupérer les données envoyées par des capteurs analogiques. Les capteurs digitaux ne sont pas pris en compte pour le moment.
+
 Pour exécuter une commande sur la plate-forme Arduino, il faut pour le moment se rendre dans le code, par le cheminement suivant : 
 
 1. Ouvrir le dossier sensorRepository et double clicker sur le fichier sensorRepository.ino, 
