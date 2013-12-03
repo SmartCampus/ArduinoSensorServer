@@ -1,6 +1,17 @@
 README Arduino Control Program 
 ==============================
 
+Description des différents blocs du programme
+-------
+
+Le programme de gestion des capteurs est divisé en 4 parties distinctes, traitant chacune une problématique donnée. 
+Les 4 parties sont les suivantes : 
+* __sensorRepository.ino :__ Contient les données concernant les capteurs, comme leur nom, le numéro de pin où ils sont branchés, leur fréquence d'envoi des données ... Cette partie contient également le tableau de tous les capteurs branchés à l'Arduino ainsi que les méthodes permettant d'ajouter ou de supprimer des capteurs. 
+* __command.ino :__ Contient le code de toutes les commandes permettant à un utilisateur d'ajouter, de supprimer, de lister ou de changer la fréquence des capteurs branchés sur la plate-forme Arduino. Cette partie contient également des fonctions de traitement des chaînes de caractéres, nécessaires pour la lecture des commandes sur l'entrée série.
+* __sensorUpdateManager.ino :__ : Contient les méthodes de gestion du temps et d'envoie des données des capteurs. 
+* __main.ino :__ Contient la boucle de traitement principale, qui envoie les informations des capteurs sur la sortie série en fonction de leurs fréquences de rafraichissement. 
+
+
 Liste des commandes disponibles 
 -------
 
