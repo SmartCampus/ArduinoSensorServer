@@ -10,6 +10,9 @@ const String NO_COMMAND = "No command to process";
 /** Invalid parameters */
 const String INVALID_PARAM = "Invalid parmeters.";
 
+/** Sensor is not existing */
+const String NO_SENSOR = "Sensor does not exist.";
+
 /** Command accepted */
 const String OK_COMMAND = "Command OK.";
 
@@ -63,6 +66,13 @@ String execCommand(String cmd)
     // Get sensor name.
     String sname = nextToken();
     
+    // Get sensor index and check if sensor exists.
+    int sid = getSensorByName(sname);
+    
+    // Check parameters. 
+    if ((sname == NULL) || (sid < 0))
+      return INVALID_PARAM;
+    
     // Delete the sensor (by name).
     deleteByName(sname);   
   }
@@ -72,6 +82,13 @@ String execCommand(String cmd)
     // Get the pin number. 
     String sname = nextToken();
     
+    // Get sensor index and check if sensor exists.
+    int sid = getSensorByName(sname);
+    
+    // Check parameters. 
+    if ((sname == NULL) || (sid < 0))
+      return INVALID_PARAM;
+      
     // Get the new frequency.
     int newFrequency = nextTokenInt();
     
@@ -84,7 +101,8 @@ String execCommand(String cmd)
     int sid = 0;
     while ((sid = getNextAvailableSensor(sid)) >= 0)
     {
-      Serial.print(getSensorName(sid)); Serial.print(" "); Serial.print(sid); Serial.print(" "); Serial.print(getSensorFrequency(sid)); Serial.println();
+      Serial.print("|"); Serial.print("Sensor Name : "); Serial.print(getSensorName(sid)); 
+      Serial.print(" | sensor ID : "); Serial.print(sid); Serial.print(" | sensor frequency : "); Serial.print(getSensorFrequency(sid)); Serial.print(" |"); Serial.println();
       sid++;
     }   
   }

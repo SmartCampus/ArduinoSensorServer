@@ -49,12 +49,15 @@ int addSensor(String name, int pinNumber, int frequency, boolean isOutput)
   // Check if existing.
   if (getSensorByName(name) >= 0)
     return -2; 
+    
+  // Check if pin number is not too high.
   else if (pinNumber > MAX_SENSORS)
     return -3;
     
   // Search for a free place in sensor tab.
   for (i; i < MAX_SENSORS; i++)
   {
+    // Check if pin is already in use.
     if (sensorTab[i]->pin == pinNumber)
       return -4;
     if (sensorTab[i] == NULL)
@@ -166,7 +169,7 @@ unsigned long getNextUpdateTime(int sid)
 /**
  * Get a sensor index from its name.
  *
- * sensorName : Sensor index in sensor tab.
+ * sensorName : Sensor index in sensor tab, -1 if sensor not found.
  */
 int getSensorByName (String sensorName) 
 {
@@ -293,17 +296,12 @@ void clearTable()
  */
 boolean updateNextSensorTime(int sid)
 {
-  /*Serial.print("Update time for sid : "); 
-  Serial.println(sid);*/
+  // Check if sensor exists.
   if (!(isSensorExists(sid)))
     return false;
-  
- /* Serial.print("Update data."); 
-  Serial.println(sensorTab[sid]->refreshDataFrequency);*/
+ 
+  // Build the new sensor refresh frequency.
   sensorTab[sid]->nextUpdateTime = millis() + sensorTab[sid]->refreshDataFrequency;
-  
- /* Serial.print("Next refresh time : ");
-  Serial.println(sensorTab[sid]->nextUpdateTime);*/
   return true;
 }
 
