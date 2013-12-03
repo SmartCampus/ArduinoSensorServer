@@ -25,7 +25,7 @@ Description des commandes
 * __add :__ Ajoute un nouveau capteur à une plate-forme Arduino connecter à un ordinateur et ainsi de récupérer ses données. 
 * __del :__ Supprime un capteur déjà branché sur une plate-forme Arduino. 
 * __freq :__ Change la fréquence d'envoi des données d'un capteurs existant et branché sur une plate-forme Arduino.
-* __list :__ Récupère la liste de tous les capteurs branchés à la plate-forme Arduino et la transmet à l'utilisateur.
+* __list :__ Récupère la liste de tous les capteurs branchés à la plate-forme Arduino et la transmet à l'utilisateur au format : &lt;nomCapteur> &lt;pinNumber> &lt;refreshDataFrequency>.
 
 Attention, il n'est possible que de récupérer les données envoyées par des capteurs analogiques. Les capteurs digitaux ne sont pas pris en compte pour le moment.
 
