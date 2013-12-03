@@ -10,9 +10,6 @@ const String NO_COMMAND = "No command to process";
 /** Invalid parameters */
 const String INVALID_PARAM = "Invalid parmeters.";
 
-/** Sensor is not existing */
-const String NO_SENSOR = "Sensor does not exist.";
-
 /** Command accepted */
 const String OK_COMMAND = "Command OK.";
 
@@ -44,67 +41,30 @@ String execCommand(String cmd)
   // Check command to execute.
   if (commandName.equals("add"))
   {
-    // Get sensor name.
-    String sname = nextToken();
-    
-    // Get pin number.
-    int pinNumber = nextTokenInt();
-    
-    // Get refresh data frequency. 
-    int frequency = nextTokenInt();
-    
-    // Check parameters. 
-    if ((sname == NULL) || (pinNumber < 0) || (frequency < 0))
-      return INVALID_PARAM;
-    
-    // Add the new sensor and return.
-    addSensor(sname, pinNumber, frequency, true); 
+    if (addCommand())
+      return OK_COMMAND;
+    return INVALID_PARAM;
   }
   
   else if (commandName.equals("del"))
   {
-    // Get sensor name.
-    String sname = nextToken();
-    
-    // Get sensor index and check if sensor exists.
-    int sid = getSensorByName(sname);
-    
-    // Check parameters. 
-    if ((sname == NULL) || (sid < 0))
-      return INVALID_PARAM;
-    
-    // Delete the sensor (by name).
-    deleteByName(sname);   
+    if (delCommand())
+      return OK_COMMAND;
+    return INVALID_PARAM;
   }
   
   else if (commandName.equals("freq"))
   {
-    // Get the pin number. 
-    String sname = nextToken();
-    
-    // Get sensor index and check if sensor exists.
-    int sid = getSensorByName(sname);
-    
-    // Check parameters. 
-    if ((sname == NULL) || (sid < 0))
-      return INVALID_PARAM;
-      
-    // Get the new frequency.
-    int newFrequency = nextTokenInt();
-    
-    // Change the data refresh rate. 
-    changeDataFrequencyByName(sname, newFrequency);  
+     if (freqCommand())
+       return OK_COMMAND;
+     return INVALID_PARAM;
   }
   
   else if (commandName.equals("list"))
   {
-    int sid = 0;
-    while ((sid = getNextAvailableSensor(sid)) >= 0)
-    {
-      Serial.print("|"); Serial.print("Sensor Name : "); Serial.print(getSensorName(sid)); 
-      Serial.print(" | sensor ID : "); Serial.print(sid); Serial.print(" | sensor frequency : "); Serial.print(getSensorFrequency(sid)); Serial.print(" |"); Serial.println();
-      sid++;
-    }   
+    if (listCommand())
+      return OK_COMMAND;
+    return INVALID_PARAM;
   }
   
   else 
@@ -165,4 +125,101 @@ int nextTokenInt()
      
    // Build result.
    return (int)stock.toInt();
+}
+
+
+/**
+ * Add a sensor to the Arduino platform.
+ *
+ * return : true if good command execution, false if not.
+ */
+boolean addCommand()
+{
+   // Get sensor name.
+    String sname = nextToken();
+    
+    // Get pin number.
+    int pinNumber = nextTokenInt();
+    
+    // Get refresh data frequency. 
+    int frequency = nextTokenInt();
+    
+    // Check parameters. 
+    if ((sname == NULL) || (pinNumber < 0) || (frequency < 0))
+      return false;
+    
+    // Add the new sensor and return.
+    addSensor(sname, pinNumber, frequency, true);
+    return true;
+}
+
+
+/**
+ * Delete a sensor from an Arduino platform.
+ *
+ * return : true if good execution, false if not.
+ */
+boolean delCommand()
+{
+  // Get sensor name.
+  String sname = nextToken();
+  
+  // Get sensor index and check if sensor exists.
+  int sid = getSensorByName(sname);
+  
+  // Check parameters. 
+  if ((sname == NULL) || (sid < 0))
+    return false;
+  
+  // Delete the sensor (by name).
+  deleteByName(sname); 
+  return true;
+}
+
+
+/**
+ * Change data frequency of an existing sensor. 
+ *
+ * return : true if good execution, false if not.
+ */
+boolean freqCommand()
+{
+  // Get the pin number. 
+  String sname = nextToken();
+  
+  // Get sensor index and check if sensor exists.
+  int sid = getSensorByName(sname);
+  
+  // Check parameters. 
+  if ((sname == NULL) || (sid < 0))
+    return false;
+    
+  // Get the new frequency.
+  int newFrequency = nextTokenInt();
+  
+  // Change the data refresh rate. 
+  changeDataFrequencyByName(sname, newFrequency); 
+  return true;
+}
+
+
+/**
+ * List all sensors plug to Arduino board.
+ *
+ * return : true if good execution, false if not.
+ */ 
+boolean listCommand()
+{
+  int sid = 0;
+  if (getNextAvailableSensor(sid) < 0) 
+    return false;
+    
+  // Print all the sensors.
+  while ((sid = getNextAvailableSensor(sid)) >= 0)
+  {
+    Serial.print("|"); Serial.print("Sensor Name : "); Serial.print(getSensorName(sid)); 
+    Serial.print(" | sensor ID : "); Serial.print(sid); Serial.print(" | sensor frequency : "); Serial.print(getSensorFrequency(sid)); Serial.print(" |"); Serial.println();
+    sid++;
+  } 
+  return true;  
 }
