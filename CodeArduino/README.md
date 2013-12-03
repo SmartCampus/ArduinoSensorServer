@@ -1,6 +1,17 @@
 README Arduino Control Program 
 ==============================
 
+Description des différents blocs du programme
+-------
+
+Le programme de gestion des capteurs est divisé en 4 parties distinctes, traitant chacune une problématique donnée. 
+Les 4 parties sont les suivantes : 
+* __sensorRepository.ino :__ Contient les données concernant les capteurs, comme leur nom, le numéro de pin où ils sont branchés, leur fréquence d'envoi des données ... Cette partie contient également le tableau de tous les capteurs branchés à l'Arduino ainsi que les méthodes permettant d'ajouter ou de supprimer des capteurs. 
+* __command.ino :__ Contient le code de toutes les commandes permettant à un utilisateur d'ajouter, de supprimer, de lister ou de changer la fréquence des capteurs branchés sur la plate-forme Arduino. Cette partie contient également des fonctions de traitement des chaînes de caractéres, nécessaires pour la lecture des commandes sur l'entrée série.
+* __sensorUpdateManager.ino :__ : Contient les méthodes de gestion du temps et d'envoie des données des capteurs. 
+* __main.ino :__ Contient la boucle de traitement principale, qui envoie les informations des capteurs sur la sortie série en fonction de leurs fréquences de rafraichissement. 
+
+
 Liste des commandes disponibles 
 -------
 
@@ -57,7 +68,10 @@ Pour ajouter de nouvelles commandes utilisables par la plate-forme, il faut se r
 3. se rendre dans la fonction &lt;String execCommand(String cmd)>, 
 4. se rendre au commentaire "// Check command to execute" et se rendre à la dernière condition "else if ....", 
 5. ajouter une nouvelle condition "else if" en dessous de l'actuelle dernière, au format suivant : &lt;else if (command.equals("NOUVELLECOMMANDE"))>,
-6. utiliser les fonctions &lt;nextToken()> pour récupérer la prochaine chaine de caractère ou la fonction &lt;nextTokenInt() pour récupèrer la prochaine valeur entière.
+6. scroller en bas du programme et écrire une nouvelle fonction, qui contiendra la commande, au format suivant : &lt;boolean macommandeCommand>() et ajouter le code nécessaire au fonctionnement de la commande. La fonction doit retourner un booleen, pour savoir si la commande a bien été exécutée ou non. 
+7. Pour récupérer les String dans l'entrée série, utiliser la fonction &lt;nextToken>. Pour récupérer une valeur entière, utiliser la fonction &lt;nextTokenInt()>. 
+8. Enfin, à l'endroit où se situe le code &lt;else if (command.equals("NOUVELLECOMMANDE"))>, ajouter les tests nécessaires à l'éxécution de la commande. 
+9. Si cela est nécessaire, se rendre dans la tab de code correspondante pour créer une nouvelle fonction, à appeler pour l'exécution de la commande (voir exemple dans la fonction &lt;addCommand> où la fonction &lt;addSensor est appellée).
 
 Les fonctions &lt;nextToken()> et &lt;nextTokenInt()> se trouvent également dans la tab &lt;command>.
 
