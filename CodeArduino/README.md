@@ -96,9 +96,9 @@ __Codes de retour :__
 2. Utiliser la commande del (au format indiqué plus haut) pour supprimer le capteur de votre choix (son nom en paramètre) et clicker sur "Send". 
 
 __Codes de retour :__
-1. Command OK si la commande est valide.
-2. Invalid parameters si la commande est bien lue mais n'a pas les paramètres correspondants où si ils n'existent pas. 
-3. Invalid command, si la commande est erronée.
+* Command OK si la commande est valide.
+* Invalid parameters si la commande est bien lue mais n'a pas les paramètres correspondants où si ils n'existent pas. 
+* Invalid command, si la commande est erronée.
 
 ###Test #3 : Utilisant de la commande freq pour changer la fréquence de rafraichissement des capteurs
 
@@ -106,9 +106,9 @@ __Codes de retour :__
 2. Utiliser la méthode freq (avec le nom du capteur de votre choix et sa nouvelle fréquence en secondes) pour changer la fréquence du capteur.
 
 __Codes de retour :__
-1. Command OK si la commande est valide.
-2. Invalid parameters si la commande est bien lue mais n'a pas les paramètres correspondants où si ils n'existent pas.
-3. Invalid command, si la commande est erronée.
+* Command OK si la commande est valide.
+* Invalid parameters si la commande est bien lue mais n'a pas les paramètres correspondants où si ils n'existent pas.
+* Invalid command, si la commande est erronée.
 
 ###Test #4 : Utilisation de la commande list pour visualiser les capteurs
 
@@ -116,7 +116,7 @@ __Codes de retour :__
 2. Ajouter, supprimer, changer la fréquence des capteurs, puis utiliser la commande list pour visualiser le bon déroulement des commandes. 
 
 __Codes de retour :__
-1. Command OK si la commande est valide.
-2. Invalid command, si la commande est erronée.
-3. Tous les capteurs présents dans le tableau et les informations les concernants. 
+* Command OK si la commande est valide.
+* Invalid command, si la commande est erronée.
+* Tous les capteurs présents dans le tableau et les informations les concernants. 
 
