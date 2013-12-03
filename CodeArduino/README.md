@@ -6,10 +6,10 @@ Liste des commandes disponibles
 
 Les commandes actuellement disponibles, ainsi que leur syntaxe, sont les suivantes : 
 
-* __add__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName> &lt;pinNumber> &lt;refreshDataFrequency>
-* __del__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName> | &lt;pinNumber>
-* __changeFreq__ &lt;sensorName> &lt;newFrequency>
-* __getSensors__
+* __add__ &lt;sensorName> &lt;pinNumber> &lt;refreshDataFrequency>
+* __del__ &nbsp;&lt;sensorName> | &lt;pinNumber>
+* __freq__ &lt;sensorName> &lt;newFrequency>
+* __list__
 
 Description des paramètres 
 --------
@@ -24,8 +24,10 @@ Description des commandes
 
 * __add :__ Ajoute un nouveau capteur à une plate-forme Arduino connecter à un ordinateur et ainsi de récupérer ses données. 
 * __del :__ Supprime un capteur déjà branché sur une plate-forme Arduino. 
-* __changeFreq :__ Change la fréquence d'envoi des données d'un capteurs existant et branché sur une plate-forme Arduino.
-* __getSensors :__ Récupère la liste de tous les capteurs branchés à la plate-forme Arduino et la transmet à l'utilisateur.
+* __freq :__ Change la fréquence d'envoi des données d'un capteurs existant et branché sur une plate-forme Arduino.
+* __list :__ Récupère la liste de tous les capteurs branchés à la plate-forme Arduino et la transmet à l'utilisateur.
+
+Attention, il n'est possible que de récupérer les données envoyées par des capteurs analogiques. Les capteurs digitaux ne sont pas pris en compte pour le moment.
 
 Pour exécuter une commande sur la plate-forme Arduino, il faut pour le moment se rendre dans le code, par le cheminement suivant : 
 
