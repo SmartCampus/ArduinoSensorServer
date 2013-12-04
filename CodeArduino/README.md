@@ -21,6 +21,8 @@ Les commandes actuellement disponibles, ainsi que leur syntaxe, sont les suivant
 * __del__ &nbsp;&lt;sensorName> 
 * __freq__ &lt;sensorName> &lt;newFrequency>
 * __list__
+* __timestamp__
+* __resetsensors__
 
 Description des paramètres 
 --------
@@ -37,6 +39,8 @@ Description des commandes
 * __del :__ Supprime un capteur déjà branché sur une plate-forme Arduino. 
 * __freq :__ Change la fréquence d'envoi des données d'un capteurs existant et branché sur une plate-forme Arduino.
 * __list :__ Récupère la liste de tous les capteurs branchés à la plate-forme Arduino et la transmet à l'utilisateur au format : &lt;nomCapteur> &lt;pinNumber> &lt;refreshDataFrequency>.
+* __timestamp :__ Affiche depuis combien de temps (en secondes) tourne le programme sur l'Arduino. 
+* __resetsensors :__ Efface toute la table contenant les capteurs de la plate-forme Arduin.o
 
 Attention, il n'est possible que de récupérer les données envoyées par des capteurs analogiques. Les capteurs digitaux ne sont pas pris en compte pour le moment.
 
@@ -134,3 +138,22 @@ __Codes de retour :__
 * Invalid command, si la commande est erronée.
 * Tous les capteurs présents dans le tableau et les informations les concernants. 
 
+###Test #5 : Utilisation de la commande resetsensors pour effacer les capteurs
+
+1. En passant par le moniteur série, utiliser la commande add (avec les paramètres de votre choix, au format indiqué précédemment) pour ajouter des capteurs. 
+2. Utiliser la commande list pour vérifier le bon ajout des capteurs. 
+3. Utiliser la commande resetsensors pour supprimer tous les capteurs présents sur la plate-forme. 
+4. Utiliser la commande list pour vérifier la bonne suppression des capteus. 
+
+__Codes de retour :__
+* Command OK si la commande est valide.
+* Invalid command, si la commande est erronée.
+
+###Test #6 : Utilisation de la commande timestamp pour obtenir le temps
+
+1. En passant par le moniteur série, utiliser la commande timestamp (sans paramètre) pour affichier le temps depuis lequel le programme tourne sur la plate-forme Arduino. 
+
+__Codes de retour :__
+* Le temps (en seconde) depuis lequel le programme tourne sur la plate-forme Arduino.
+* Command OK si la commande est valide.
+* Invalid command, si la commande est erronée.
