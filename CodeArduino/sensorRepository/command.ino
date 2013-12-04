@@ -41,30 +41,38 @@ String execCommand(String cmd)
   // Check command to execute.
   if (commandName.equals("add"))
   {
-    if (addCommand())
-      return OK_COMMAND;
-    return INVALID_PARAM;
+    if (!(addCommand()))
+      return INVALID_PARAM;
   }
   
   else if (commandName.equals("del"))
   {
-    if (delCommand())
-      return OK_COMMAND;
-    return INVALID_PARAM;
+    if (!(delCommand()))
+      return INVALID_PARAM;
   }
   
   else if (commandName.equals("freq"))
   {
-     if (freqCommand())
-       return OK_COMMAND;
-     return INVALID_PARAM;
+     if (!(freqCommand())) 
+       return INVALID_PARAM;
   }
   
   else if (commandName.equals("list"))
   {
-    if (listCommand())
-      return OK_COMMAND;
-    return INVALID_PARAM;
+    if (!(listCommand()))
+      return INVALID_PARAM;
+  }
+  
+  else if (commandName.equals("resetsensors"))
+  {
+    resetSensorsCommand();
+  }
+  
+  else if (commandName.equals("timestamp"))
+  {
+    if (!(timeStampCommand()))
+      return INVALID_PARAM;
+      
   }
   
   else 
@@ -223,3 +231,33 @@ boolean listCommand()
   } 
   return true;  
 }
+
+
+/**
+ * Get Arduino board current time. 
+ *
+ *
+ * return : true if good execution, false if not.
+ */
+boolean timeStampCommand()
+{
+  int time = boardTime();
+  if (time < 0)
+    return false;
+  Serial.print("Arduino time : "); Serial.print(time); Serial.println(" s.");
+  return true;
+}
+
+
+/**
+ * Clear the sensors table.
+ *
+ * return : None.
+ */
+void resetSensorsCommand()
+{
+  clearTable();
+}
+
+
+ 

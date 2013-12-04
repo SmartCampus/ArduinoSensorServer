@@ -306,6 +306,17 @@ boolean updateNextSensorTime(int sid)
 }
 
 
+/**
+ * Get Arduino board time in seconds.
+ *
+ * return : Arduino time in seconds.
+ */
+int boardTime()
+{
+  return millis() / 1000;
+}
+
+
 
 
 
