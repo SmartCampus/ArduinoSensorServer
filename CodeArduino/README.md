@@ -17,10 +17,11 @@ Liste des commandes disponibles
 
 Les commandes actuellement disponibles, ainsi que leur syntaxe, sont les suivantes : 
 
-* __add__ &lt;sensorName> &lt;pinNumber> &lt;refreshDataFrequency>
-* __del__ &nbsp;&lt;sensorName> 
-* __freq__ &lt;sensorName> &lt;newFrequency>
-* __list__
+* __add__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName> &lt;pinNumber> &lt;refreshDataFrequency>
+* __del__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName> 
+* __freq__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName> &lt;newFrequency>
+* __sensorinfo__ &lt;sensorName>
+* __listsensors__
 * __timestamp__
 * __resetsensors__
 
@@ -38,7 +39,8 @@ Description des commandes
 * __add :__ Ajoute un nouveau capteur à une plate-forme Arduino connecter à un ordinateur et ainsi de récupérer ses données. 
 * __del :__ Supprime un capteur déjà branché sur une plate-forme Arduino. 
 * __freq :__ Change la fréquence d'envoi des données d'un capteurs existant et branché sur une plate-forme Arduino.
-* __list :__ Récupère la liste de tous les capteurs branchés à la plate-forme Arduino et la transmet à l'utilisateur au format : &lt;nomCapteur> &lt;pinNumber> &lt;refreshDataFrequency>.
+* __sensorinfo :__ Affiche les informations concernant un capteur, au format &lt;sensorName> &lt;sensorId> &lt;pinNumber> &lt;refreshDataFrequency>
+* __listsensors :__ Récupère les noms de tous les capteurs branchés à la plate-forme Arduino et les affiche sur une ligne.
 * __timestamp :__ Affiche depuis combien de temps (en secondes) tourne le programme sur l'Arduino. 
 * __resetsensors :__ Efface toute la table contenant les capteurs de la plate-forme Arduin.o
 
@@ -62,6 +64,9 @@ Pour cela, il faut suivre le cheminement suivant :
 
 Attention à ne pas taper les commandes trop vite sur le moniteur de série ni à les envoyer trop rapidement, il semblerait qu'il ne soit pas capable de les lire correctement. 
 
+__Remarque :__ Les messages de retour des commandes doivent être précédés d'un "R:" . Les messages d'informations doivent être précédés d'un "I:" et les messages de données qui ne sont pas au format JSON doivent être précédés d'un "D:" . 
+ 
+
 Ajouter de nouvelles commandes
 -------
 
@@ -78,6 +83,10 @@ Pour ajouter de nouvelles commandes utilisables par la plate-forme, il faut se r
 9. Si cela est nécessaire, se rendre dans la tab de code correspondante pour créer une nouvelle fonction, à appeler pour l'exécution de la commande (voir exemple dans la fonction &lt;addCommand> où la fonction &lt;addSensor est appellée).
 
 Les fonctions &lt;nextToken()> et &lt;nextTokenInt()> se trouvent également dans la tab &lt;command>.
+
+__IMPORTANT :__ Les messages de retour des commandes doivent être précédés d'un "R:" . Les messages d'informations doivent être précédés d'un "I:" et les messages de données qui ne sont pas au format JSON doivent être précédés d'un "D:" . 
+De même, chaque commande ne doit envoyer un message que sur UNE SEULE ligne. 
+Il faut respecter ce format pour permettre au client de recevoir les informations dans le bon ordre, et de ne pas les mélanger.
 
 Tests réalisés 
 -------
@@ -104,9 +113,9 @@ Attention à indiquer le bon pin de branchement du capteur, sinon la plate-forme
 Un capteur a été préalablement ajouté pour les besoins de la démonstration. Vous pouvez bien évidemment en ajouter d'autres.
 
 __Codes de retour :__ 
-1. Command OK si la commande est valide.
-2. Invalid parameters si la commande est bien lue mais n'a pas les paramètres correspondants où si ils n'existent pas. 
-3. Invalid command, si la commande est erronée.
+1."R: Command OK" si la commande est valide.
+2."R: Invalid parameters" si la commande est bien lue mais n'a pas les paramètres correspondants où si ils n'existent pas. 
+3."R: Invalid command", si la commande est erronée.
 
 ###Test #2 : Suppression d'un capteur existant de l'Arduino 
 
@@ -114,9 +123,9 @@ __Codes de retour :__
 2. Utiliser la commande del (au format indiqué plus haut) pour supprimer le capteur de votre choix (son nom en paramètre) et clicker sur "Send". 
 
 __Codes de retour :__
-* Command OK si la commande est valide.
-* Invalid parameters si la commande est bien lue mais n'a pas les paramètres correspondants où si ils n'existent pas. 
-* Invalid command, si la commande est erronée.
+*"R: Command OK" si la commande est valide.
+*"R: Invalid parameters" si la commande est bien lue mais n'a pas les paramètres correspondants où si ils n'existent pas. 
+*"R: Invalid command", si la commande est erronée.
 
 ###Test #3 : Utilisant de la commande freq pour changer la fréquence de rafraichissement des capteurs
 
@@ -124,19 +133,19 @@ __Codes de retour :__
 2. Utiliser la commande freq (avec le nom du capteur de votre choix et sa nouvelle fréquence en secondes) pour changer la fréquence du capteur.
 
 __Codes de retour :__
-* Command OK si la commande est valide.
-* Invalid parameters si la commande est bien lue mais n'a pas les paramètres correspondants où si ils n'existent pas.
-* Invalid command, si la commande est erronée.
+*"R: Command OK" si la commande est valide.
+*"R: Invalid parameters" si la commande est bien lue mais n'a pas les paramètres correspondants où si ils n'existent pas.
+*"R: Invalid command", si la commande est erronée.
 
-###Test #4 : Utilisation de la commande list pour visualiser les capteurs
+###Test #4 : Utilisation de la commande listsensors pour visualiser les capteurs
 
 1. En passant par le moniteur série, utiliser la commande list (sans paramètre) pour imprimer sur la sortie série le nom des capteurs actuels, le pin où ils sont branchés et leur fréquence de rafraichissement. 
-2. Ajouter, supprimer, changer la fréquence des capteurs, puis utiliser la commande list pour visualiser le bon déroulement des commandes. 
+2. Ajouter de nouveaux capteurs, puis utiliser la commande list pour visualiser le bon déroulement des commandes. 
 
 __Codes de retour :__
-* Command OK si la commande est valide.
-* Invalid command, si la commande est erronée.
-* Tous les capteurs présents dans le tableau et les informations les concernants. 
+* "R: Command OK" si la commande est valide.
+* "R: Invalid command", si la commande est erronée.
+* Tous les noms des capteurs actuels sur une ligne. 
 
 ###Test #5 : Utilisation de la commande resetsensors pour effacer les capteurs
 
@@ -146,8 +155,8 @@ __Codes de retour :__
 4. Utiliser la commande list pour vérifier la bonne suppression des capteus. 
 
 __Codes de retour :__
-* Command OK si la commande est valide.
-* Invalid command, si la commande est erronée.
+* "R: Command OK" si la commande est valide.
+* "R: Invalid command", si la commande est erronée.
 
 ###Test #6 : Utilisation de la commande timestamp pour obtenir le temps
 
@@ -155,5 +164,5 @@ __Codes de retour :__
 
 __Codes de retour :__
 * Le temps (en seconde) depuis lequel le programme tourne sur la plate-forme Arduino.
-* Command OK si la commande est valide.
-* Invalid command, si la commande est erronée.
+* "R: Command OK" si la commande est valide.
+* "R: Invalid command", si la commande est erronée.
