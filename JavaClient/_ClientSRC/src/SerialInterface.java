@@ -1,8 +1,6 @@
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
-import gnu.io.SerialPortEvent;
-import gnu.io.SerialPortEventListener;
 import gnu.io.UnsupportedCommOperationException;
 
 import java.io.BufferedReader;
@@ -181,28 +179,6 @@ public static void main(String[] args)
 throws Exception
 {
    final SerialInterface si = new SerialInterface("COM3");
-  /* new Thread()
-   {
-      public void run()
-      {
-         while (true)
-         {
-            try
-            {
-               System.out.println(si.receive());
-            }
-            catch (InterruptedException e)
-            {
-               e.printStackTrace();
-            }
-            catch (IOException e)
-            {
-               e.printStackTrace();
-            }
-         }
-      }
-   }.start(); */
-
    si.sendFile("command1");
    while (true)
    {
