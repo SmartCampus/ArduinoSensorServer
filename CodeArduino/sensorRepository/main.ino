@@ -2,11 +2,11 @@ void setup()
 {
   Serial.begin(9600);
   clearTable(); // Clear sensors table. 
-  Serial.println("Tab cleared.");
+  Serial.println("I : Tab cleared.");
   
   // Method add test.
   int sensor = addSensor("temperature1", 1, 3, true); 
-  Serial.print("Sensor created : "); 
+  Serial.print("I : Sensor created : "); 
   Serial.println(sensor);
   
  // execCommand("add temperature2 2 5"); // Add a sensor name temperature2, on the pin number 2, with a refresh rate of 5 seconds. 
@@ -27,7 +27,7 @@ void loop()
     }
     
     // Execute the command.
-    Serial.print("Received command : "); Serial.println(content);
+    // Serial.print("Received command : "); Serial.println(content);
     Serial.println(execCommand(content));
   }
   

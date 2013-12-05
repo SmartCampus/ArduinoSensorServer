@@ -5,13 +5,13 @@ String theCommand;
 int readIndex; 
 
 /** No command case */
-const String NO_COMMAND = "No command to process";
+const String NO_COMMAND = "R: No command to process";
 
 /** Invalid parameters */
-const String INVALID_PARAM = "Invalid parmeters.";
+const String INVALID_PARAM = "R: Invalid parmeters.";
 
 /** Command accepted */
-const String OK_COMMAND = "Command OK.";
+const String OK_COMMAND = "R: Command OK.";
 
 
 /**
@@ -57,9 +57,18 @@ String execCommand(String cmd)
        return INVALID_PARAM;
   }
   
-  else if (commandName.equals("list"))
+  else if (commandName.equals("listsensors"))
   {
-    if (!(listCommand()))
+    if (!(listsensorsCommand()))
+      return INVALID_PARAM;
+  }
+  
+  else if (commandName.equals("sensorinfo"))
+  {
+    // Get sensor name.
+    String sname = nextToken();
+    
+    if (!(sensorinfoCommand(sname)))
       return INVALID_PARAM;
   }
   
@@ -77,7 +86,7 @@ String execCommand(String cmd)
   
   else 
   {
-    return "Unknown command."; 
+    return "R: Unknown command."; 
   }
   
   return OK_COMMAND;
@@ -222,7 +231,8 @@ boolean listCommand()
   if (getNextAvailableSensor(sid) < 0) 
     return false;
     
-  // Print all the sensors.
+  // Print all the sensors. 
+  Serial.print("R: Sensor array ");
   while ((sid = getNextAvailableSensor(sid)) >= 0)
   {
     Serial.print("|"); Serial.print("Sensor Name : "); Serial.print(getSensorName(sid)); 
@@ -231,6 +241,51 @@ boolean listCommand()
   } 
   return true;  
 }
+
+
+/**
+ * List all the sensors of the Arduino Board.
+ *
+ * return : true if good execution, false if not.
+ */
+boolean listsensorsCommand()
+{
+  int sid = 0; 
+  if (getNextAvailableSensor(sid) < 0)
+    return false;
+    
+  // Print all sensors name.
+  Serial.print("R:");
+  while((sid = getNextAvailableSensor(sid)) >= 0)
+  {
+    Serial.print(" "); Serial.print(getSensorName(sid));  
+    sid++;
+  }
+  
+  Serial.println();
+  return true;
+}
+
+
+/** 
+ * Get sensor informations from a sensor name.
+ *
+ * return : true if good execution, false if not.
+ */
+boolean sensorinfoCommand(String name)
+{
+  // Get sensor ID.
+  int sid = getSensorByName(name);
+  if (sid < 0)
+    return false;
+  
+  // Print sensor informations.
+  Serial.print("R: ");
+  Serial.print("name : "); Serial.print(getSensorName(sid)); 
+  Serial.print(" id : "); Serial.print(sid); Serial.print(" pin : ");Serial.print(getSensorPinNumber(sid)); Serial.print(" frequency : ");  Serial.print(getSensorFrequency(sid)); Serial.println();
+  return true;
+}
+
 
 
 /**
@@ -244,7 +299,7 @@ boolean timeStampCommand()
   int time = boardTime();
   if (time < 0)
     return false;
-  Serial.print("Arduino time : "); Serial.print(time); Serial.println(" s.");
+  Serial.print("R: Arduino time : "); Serial.print(time); Serial.println(" s.");
   return true;
 }
 
