@@ -24,6 +24,8 @@ Les commandes actuellement disponibles, ainsi que leur syntaxe, sont les suivant
 * __listsensors__
 * __timestamp__
 * __resetsensors__
+* __end__
+* __begin__
 
 Description des paramètres 
 --------
@@ -42,7 +44,9 @@ Description des commandes
 * __sensorinfo :__ Affiche les informations concernant un capteur, au format &lt;sensorName> &lt;sensorId> &lt;pinNumber> &lt;refreshDataFrequency>
 * __listsensors :__ Récupère les noms de tous les capteurs branchés à la plate-forme Arduino et les affiche sur une ligne.
 * __timestamp :__ Affiche depuis combien de temps (en secondes) tourne le programme sur l'Arduino. 
-* __resetsensors :__ Efface toute la table contenant les capteurs de la plate-forme Arduin.o
+* __resetsensors :__ Efface toute la table contenant les capteurs de la plate-forme Arduino.
+* __end :__ Arrête la communication série entre l'Arduino et l'ordinateur. 
+* __begin :__ Démarre la communication série entre l'Arduino et l'ordinateur. Cette commande ne fonctionne qu'après l'appel de la commande "end". 
 
 Attention, il n'est possible que de récupérer les données envoyées par des capteurs analogiques. Les capteurs digitaux ne sont pas pris en compte pour le moment.
 
@@ -65,6 +69,7 @@ Pour cela, il faut suivre le cheminement suivant :
 Attention à ne pas taper les commandes trop vite sur le moniteur de série ni à les envoyer trop rapidement, il semblerait qu'il ne soit pas capable de les lire correctement. 
 
 __Remarque :__ Les messages de retour des commandes doivent être précédés d'un "R:" . Les messages d'informations doivent être précédés d'un "I:" et les messages de données qui ne sont pas au format JSON doivent être précédés d'un "D:" . 
+La commande end va clore le tableau JSON des données envoyées par l'Arduino grâce aux caractères "}];". L'appel de la commande begin va rouvrir un nouveau tableau de données.
  
 
 Ajouter de nouvelles commandes
