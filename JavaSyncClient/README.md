@@ -1,27 +1,21 @@
 README : Client Java synchrone
-=====
+=========
 
-Description du client 
+Structure du programme
 ------
 
-Le client est en communication avec la plate-forme Arduino Uno connectée à l'ordinateur. Il peut envoyer des fichiers de commandes qui seront exécutés par l'Arduino, puis récupérer les données résultantes. 
-Le client se charge également de convertir les données envoyées par l'Arduino au format JSON, compréhensible par le collecteur de données. 
-Le client est composé d'une seule classe, qui peut-être découpée en 3, mais cela ne change rien pour cette version : 
+Le programme est divisé en 4 classes : 
+* __ArduinoInterface.java :__ Cette classe se charge d'ouvrir le port de communication entre l'Arduino et le client Java, d'envoyer des lignes de commandes ou des fichiers de commandes à l'Arduino, et d'afficher les informations et les données qu'envoie l'Arduino. 
+* __DataReceiver.java :__ La classe DataReceiver.java permet d'écrire toutes les données des capteurs renvoyées par l'Arduino dans un fichier json. Chaque données est accompagnée de sa date d'écriture dans le fichier. 
+* __InformationReceiver.java :__ De la même manière que la classe précédente, la classe InformationReceiver.java permet d'enregistrer les informations reçues de la plate-forme Arduino (_rappel : au format "I: &lt;message>"_) dans un journal de log.
+* __Main.java :__ Il s'agit de la classe exécutant le client Java. Il y a, en argument du programme, le nom du port utilisé par l'Arduino (ici le port COM3). 
 
-* __SerialInterface.java :__ Lis la sortie du port série pour recevoir les données de l'Arduino. Possède une méthode de lecture sur le port série, et deux méthode d'écriture. La première permet d'écrire un simple String sur le port série, et la seconde permet de lire le contenu d'un fichier, découpé ligne par ligne. 
+Attention toutefois, certains problèmes subsistent encore. En effet, il existe un certain délai de communication entre un ordinateur et une plate-forme Arduino. De même, le temps de traitement de certaines données dépend grandement de la vitesse de traitement du processur. 
+La méthode "execCommand" de la classe ArduinoInterface.java contient un &lt;Thread.sleep(1500)>, qui est, pour le moment, obligatoire. 
+Il est possible que la valeur 1500 ne soit pas suffisante pour votre ordinateur. Dans ce cas, n'hésitez pas à l'augmenter. 
 
+Exécution du programme 
+-------
 
-Utilisation du client
-------
-_Note : Le client est en version java 1.7 ._
-
-Pour utiliser le client, il faut ouvrir SerialInterface.java dans Eclipse ou tout autre IDE Java (NetBeans...). La méthode pour utiliser le client avec javac via l'invite de commandes ne sera pas détaillée ici, et seule une méthode avec l'IDE Eclipse sera détaillée. 
-Prochainement, un jar exécutable sera disponible, lorsque le client sera dans une version plus avancée. 
-
-1. Ouvrir le dossier ArduinoSensorServer/JavaClient/_ClientSRC, 
-2. se rendre dans le dossier src/ et double clicker sur le fichier SerialInterface.class (ou choisir votre IDE préféré pour l'ouvrir, 
-3. se rendre dans la méthode &lt;public static void main(String[] args)> pour éditer le port série (COM3 par défaut, mais si vous avez branché plusieurs Arduino, il se peut que le port soit COM4, COM5, ..., COMX selon l'Arduino utilisé,
-4. Une fois le port édité, vous pouvez lancer le programme (F5 sur Eclipse, ou le bouton "Run"), qui se lancera par défaut avec le fichier "command1.txt" en paramètre. 
-5. Pour remplacer le fichier de commande, se rendre, toujours dans le main, à la ligne contenant le code &lt;si.sendFile("NOM_FICHIER")> et remplacer le chemin du fichier par celui voulu. 
-
-__Attention :__ Penser à respecter le format de commandes décrit dans ArduinoSensorServer/README.md ou dans ArduinoSensorServer/CodeArduino/README.md . 
+L'ensemble du code source est disponible au chemin ArduinoSensorServer/JavaAsyncClient/_AsyncClientSrc. 
+Il faut copier l'ensemble du répertoire dans votre IDE préféré (les exemples seront réalisés avec Eclipse Juno et Indigo). 
