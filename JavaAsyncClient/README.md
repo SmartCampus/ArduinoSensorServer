@@ -1,4 +1,4 @@
-README : Client Java
+README : Client Java synchrone
 =====
 
 Description du client 
