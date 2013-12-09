@@ -29,3 +29,5 @@ Il faut copier l'ensemble du répertoire dans votre IDE préféré (les exemples
 
 
 __Attention !__ Le répertoire "lib" contient les librairies (.jar) nécessaires au fonctionnement du projet, à savoir la librairie RXTX, qui permet la communication avec le port série. 
+Lors de l'exécution du client Java et particulièrement lors de l'envoi des lignes de commandes vers l'Arduino, il est normal que la commande ne s'exécute pas instantanément. 
+En effet, le client Java attend la réponse de l'Arduino à la commande avant de continuer à affichier ou à envoyer quoi que ce soit. La communication série n'étant pas instantanée, il est possible qu'il y ai une attente. 
