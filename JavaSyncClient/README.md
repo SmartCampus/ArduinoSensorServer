@@ -18,4 +18,14 @@ Exécution du programme
 -------
 
 L'ensemble du code source est disponible au chemin ArduinoSensorServer/JavaAsyncClient/_AsyncClientSrc. 
-Il faut copier l'ensemble du répertoire dans votre IDE préféré (les exemples seront réalisés avec Eclipse Juno et Indigo). 
+Il faut copier l'ensemble du répertoire dans votre IDE préféré (les exemples seront réalisés avec Eclipse Juno et Indigo) : 
+
+1. Ouvrir la classe Main.java, qui contient le lancement du programme.  
+2. Le port série par défaut est le port COM3. Pour le changer, sous Eclipse, se rendre dans l'onglet "Run Configurations ..." et cliquer sur la table "arguments". Dans la zone "Program Arguments", remplacer "COM3" par le port choisi. 
+3. De retour dans la classe Main.java, le fichier de commande par défaut est "command1.txt". Comme précédemment, le contenu de se fichier peut-être changer. Pour cela, il faut se rendre à la racine du projet et ouvrir le fichier "command1.txt". Il suffit ensuite de changer les commandes avec la syntaxe correspondante (voir README.md principal). Il est également possible de créer son propre fichier de commande, il faudra donc passer le chemin correspondant en paramètre. 
+4. Cliquer sur "Run" (flèche verte sous Eclipse, ou presser F5) et observer le résultat. 
+5. Le fichier stockant les données après exécution du client est "dataReceived.json", à la racine du projet.
+6. Le journal de log contenant les données est "informationLog.log", à la racine du projet. 
+
+
+__Attention !__ Le répertoire "lib" contient les librairies (.jar) nécessaires au fonctionnement du projet, à savoir la librairie RXTX, qui permet la communication avec le port série. 
