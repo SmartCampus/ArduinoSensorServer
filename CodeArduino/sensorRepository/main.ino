@@ -8,8 +8,7 @@ void setup()
   int sensor = addSensor("temperature1", 1, 3, true); 
   Serial.print("I : Sensor created : "); 
   Serial.println(sensor);
-  
- // execCommand("add temperature2 2 5"); // Add a sensor name temperature2, on the pin number 2, with a refresh rate of 5 seconds. 
+  Serial.println("Arduino setup finished");
 }
 
 void loop()

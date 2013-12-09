@@ -34,7 +34,7 @@ String execCommand(String cmd)
   
   // Get command name. 
   String commandName = nextToken();
-  Serial.print("Command name : "); Serial.println(commandName);
+  // Serial.print("Command name : "); Serial.println(commandName);
   if (commandName == NULL)
     return NO_COMMAND;
   
