@@ -179,7 +179,7 @@ private synchronized void processReceivedEvent(SerialPortEvent oEvent)
          System.out.println("Received line : " + inputLine);
 
          // Check data type.
-         if (inputLine.startsWith("{"))
+         if (inputLine.startsWith("\""))
          {
             sensorDataReceived(inputLine);
          }

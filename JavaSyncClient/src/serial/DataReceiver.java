@@ -32,7 +32,7 @@ public void writeData(String data, String fileName)
       BufferedWriter bw = new BufferedWriter(fw);
       PrintWriter pw = new PrintWriter(bw);
 
-      pw.println(data + " : " + getActualDate());
+      pw.println("{ " + data + ", \"h\":" + " \"" + getActualDate() + "\"" + " }");
       pw.close();
    }
    catch (IOException e)
