@@ -29,6 +29,5 @@ void refreshSensorData(int sid)
    delay(100);
    
    // Print the data.
-   Serial.print("\""); Serial.print("n\":"); Serial.print(" \"");Serial.print(getSensorName(sid)); Serial.print("\","); 
-   Serial.print(" \"v\": "); Serial.print(value); Serial.print(","); Serial.print(" \"t\": "); Serial.println(millis());
+   Serial.print("n: "); Serial.print(getSensorName(sid)); Serial.print(" v: "); Serial.println(value); Serial.print(" t: "); Serial.println(millis());
 }

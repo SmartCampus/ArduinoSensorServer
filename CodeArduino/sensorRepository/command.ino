@@ -299,7 +299,7 @@ boolean timeStampCommand()
   int time = boardTime();
   if (time < 0)
     return false;
-  Serial.print("R: Arduino time : "); Serial.print(time); Serial.println(" s.");
+  Serial.print("R: Arduino time : "); Serial.print(time); Serial.println(" ms.");
   return true;
 }
 

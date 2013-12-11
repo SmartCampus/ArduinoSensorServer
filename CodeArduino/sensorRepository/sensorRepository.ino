@@ -313,7 +313,7 @@ boolean updateNextSensorTime(int sid)
  */
 int boardTime()
 {
-  return millis() / 1000;
+  return millis();
 }
 
 

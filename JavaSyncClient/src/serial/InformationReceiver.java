@@ -34,6 +34,7 @@ public InformationReceiver()
 {
    try
    {
+      // Build the logger.
       fh = new FileHandler("informationLog.log", false);
       fh.setFormatter(new SimpleFormatter());
       logger.addHandler(fh);

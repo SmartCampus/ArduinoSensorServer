@@ -104,7 +104,7 @@ throws Exception
    port.notifyOnDataAvailable(true);
 
    // Wait for Arduino setup termination (to be changed).
-   waitForResponseStartingBy("Arduino setup", 10000);
+   waitForResponseStartingBy("I: Arduino setup", 10000);
 }
 
 
@@ -179,7 +179,7 @@ private synchronized void processReceivedEvent(SerialPortEvent oEvent)
          System.out.println("Received line : " + inputLine);
 
          // Check data type.
-         if (inputLine.startsWith("\""))
+         if (inputLine.startsWith("n:"))
          {
             sensorDataReceived(inputLine);
          }
@@ -227,6 +227,17 @@ throws InterruptedException, IOException
    // Check response.
    if (!(receivedResponse.startsWith(expectedResponseStart)))
       throw new IOException("Timeout waiting for message starting by : " + str);
+}
+
+
+/**
+ * Get the port name currently in use. 
+ * 
+ * @return The port name currently in use. 
+ */
+public String getPortName()
+{
+   return portName;
 }
 
 

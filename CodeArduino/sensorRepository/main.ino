@@ -1,19 +1,23 @@
+/** Check if the setup is done or not */
+boolean initDone = false;
+
 void setup()
 {
   Serial.begin(9600);
   clearTable(); // Clear sensors table. 
-  Serial.println("I : Tab cleared.");
+  Serial.println("I: Tab cleared.");
   
-  // Method add test.
-  int sensor = addSensor("temperature1", 1, 3, true); 
-  Serial.print("I : Sensor created : "); 
-  Serial.println(sensor);
-  Serial.println("Arduino setup finished");
+  if (!initDone)
+  {
+    Serial.println("I: Arduino setup finished.");
+    initDone = true;
+  }
 }
 
 void loop()
 {  
-  char character; // Character read by the serial. 
+   // Character read by the serial. v
+  char character;
   
   // Check if something to read.
   if (Serial.available())
