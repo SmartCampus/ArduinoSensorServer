@@ -29,6 +29,7 @@ private String sensorTime;
 
 /**
  * Default constrctor.
+ * Construct a sensor with a String content.
  * 
  * @param informations Sensor informations.
  * @param currentPort  Current serial port.
@@ -51,6 +52,21 @@ throws UnknownHostException
          sensorValue = Float.parseFloat(tkz.nextToken());
       break;
    }
+   sensorTime = getActualDate();
+}
+
+
+/**
+ * Second constructor.
+ * Create a SensorData by the help of real values.
+ * 
+ * @param name  Sensor name.
+ * @param value Sensor current value.
+ */
+public SensorData(String name, float value)
+{
+   sensorName = name;
+   sensorValue = value;
    sensorTime = getActualDate();
 }
 

@@ -35,6 +35,7 @@ throws Exception
          try
          {
             SensorData sd = new SensorData(data, portName);
+            //TODO : add sensor to SensorRepository instance.
          }
          catch (UnknownHostException e)
          {
