@@ -68,8 +68,7 @@ Pour cela, il faut suivre le cheminement suivant :
 
 Attention à ne pas taper les commandes trop vite sur le moniteur de série ni à les envoyer trop rapidement, il semblerait qu'il ne soit pas capable de les lire correctement. 
 
-__Remarque :__ Les messages de retour des commandes doivent être précédés d'un "R:" . Les messages d'informations doivent être précédés d'un "I:" et les messages de données qui ne sont pas au format JSON doivent être précédés d'un "D:" . 
-La commande end va clore le tableau JSON des données envoyées par l'Arduino grâce aux caractères "}];". L'appel de la commande begin va rouvrir un nouveau tableau de données.
+__Remarque :__ Les messages de retour des commandes doivent être précédés d'un "R:" . Les messages d'informations doivent être précédés d'un "I:" et les messages de données doivent être précédés d'un "D:" . .
  
 
 Ajouter de nouvelles commandes

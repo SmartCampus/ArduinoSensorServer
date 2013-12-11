@@ -15,10 +15,10 @@ Utilisation du client
 ------
 _Note : Le client est en version java 1.7 ._
 
-Pour utiliser le client, il faut ouvrir SerialInterface.java dans Eclipse ou tout autre IDE Java (NetBeans...). La méthode pour utiliser le client avec javac via l'invite de commandes ne sera pas détaillée ici, et seule une méthode avec l'IDE Eclipse sera détaillée. 
+Pour utiliser le client, il faut ouvrir SerialInterface.java dans Eclipse ou tout autre IDE Java (NetBeans...). La méthode pour utiliser le client avec javac via l'invite de commandes ne sera pas détaillée ici, et seule une méthode avec l'IDE Eclipse (Juno et Indigo) sera détaillée. 
 Prochainement, un jar exécutable sera disponible, lorsque le client sera dans une version plus avancée. 
 
-1. Ouvrir le dossier ArduinoSensorServer/JavaClient/_ClientSRC, 
+1. Ouvrir le dossier ArduinoSensorServer/JavaAsyncClient/_JavaAsyncClientSRC, 
 2. se rendre dans le dossier src/ et double clicker sur le fichier SerialInterface.class (ou choisir votre IDE préféré pour l'ouvrir, 
 3. se rendre dans la méthode &lt;public static void main(String[] args)> pour éditer le port série (COM3 par défaut, mais si vous avez branché plusieurs Arduino, il se peut que le port soit COM4, COM5, ..., COMX selon l'Arduino utilisé,
 4. Une fois le port édité, vous pouvez lancer le programme (F5 sur Eclipse, ou le bouton "Run"), qui se lancera par défaut avec le fichier "command1.txt" en paramètre. 
