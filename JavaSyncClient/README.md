@@ -9,7 +9,7 @@ Le programme est divisé en 4 classes :
 * __DataReceiver.java :__ La classe DataReceiver.java permet d'écrire toutes les données des capteurs renvoyées par l'Arduino dans un fichier json. Chaque données est accompagnée de sa date d'écriture dans le fichier. 
 * __InformationReceiver.java :__ De la même manière que la classe précédente, la classe InformationReceiver.java permet d'enregistrer les informations reçues de la plate-forme Arduino (_rappel : au format "I: &lt;message>"_) dans un journal de log.
 * __SensorData.java :__ Cette classe stock les informations importantes concernants un capteur, c'est à dire son nom au format : &lt;NOM_PC> . &lt;NOM_PORT> . &lt;NOM_CAPTEUR>. Elle stock également la valeur du capteur et la date de récéption de la donnée. 
-* __SensorRepository :__ Il s'agit de la "base de données" de nos capteurs. Ils sont stockés dans un dictionnaire au format &lt;NOM_CAPTEUR>, &lt;SensorData>. Elle permet également la génération de la configuration précédente de l'Arduino. Cette classe est en cours de développement et d'intégration et n'est pas encore présente dans le package actuel. 
+* __SensorRepository :__ Il s'agit de la "base de données" de nos capteurs. Ils sont stockés dans un dictionnaire au format &lt;NOM_CAPTEUR>, &lt;SensorData>. Elle permet également la génération de la configuration précédente de l'Arduino. _Cette classe est en cours de développement et d'intégration et n'est pas encore présente dans le package actuel._ 
 * __Main.java :__ Il s'agit de la classe exécutant le client Java. Il y a, en argument du programme, le nom du port utilisé par l'Arduino (ici le port COM3). 
 
 Attention toutefois, certains problèmes subsistent encore. En effet, il existe un certain délai de communication entre un ordinateur et une plate-forme Arduino. De même, le temps de traitement de certaines données dépend grandement de la vitesse de traitement du processur. 
@@ -19,7 +19,7 @@ Il est possible que la valeur 1500 ne soit pas suffisante pour votre ordinateur.
 Exécution du programme 
 --------
 
-L'ensemble du code source est disponible au chemin ArduinoSensorServer/JavaSyncClient/_SyncClientSRC 
+L'ensemble du code source est disponible au chemin ArduinoSensorServer/JavaSyncClient/_JavaSyncClientSRC 
 Il faut copier l'ensemble du répertoire dans votre IDE préféré (les exemples seront réalisés avec Eclipse Juno et Indigo) : 
 
 1. Ouvrir la classe Main.java, qui contient le lancement du programme.  
