@@ -30,10 +30,10 @@ Il faut copier l'ensemble du répertoire dans votre IDE préféré (les exemples
 6. Le journal de log contenant les données est _"informationLog.log"_, à la racine du projet. 
 
 
-__Attention !__ Le répertoire "lib" contient les librairies (.jar) nécessaires au fonctionnement du projet, à savoir la librairie RXTX, qui permet la communication avec le port série. 
+__Attention !__ Le répertoire _lib_ contient les librairies (.jar) nécessaires au fonctionnement du projet, à savoir la librairie RXTX, qui permet la communication avec le port série. 
 Lors de l'exécution du client Java et particulièrement lors de l'envoi des lignes de commandes vers l'Arduino, il est normal que la commande ne s'exécute pas instantanément. 
 En effet, le client Java attend la réponse de l'Arduino à la commande avant de continuer à affichier ou à envoyer quoi que ce soit. La communication série n'étant pas instantanée, il est possible qu'il y ai une attente. 
 
 __Remarque :__ Il est important de noter que l'Arduino se reset automatiquement à chaque connexion ou déconnexion du port série. Pour palier à ce problème, un système de sauvegarde de l'ancienne configuration de l'Arduino a été mis en place. 
-Vous trouverez dans votre répertoire principal un fichier "oldCommand.txt" contenant les commandes permettant de revenir à la configuraton précédente de votre Arduino, en cas de bug ou de déconnexion du port série. 
+Vous trouverez dans votre répertoire principal un fichier _oldCommand.txt_ contenant les commandes permettant de revenir à la configuraton précédente de votre Arduino, en cas de bug ou de déconnexion du port série. 
 Il vous suffira de passer ce fichier en paramètre de la fonction &lt;execFileCommand(String filePath)> pour retrouver l'état précédent.  
