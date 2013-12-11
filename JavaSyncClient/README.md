@@ -4,8 +4,9 @@ README : Client Java synchrone
 Structure du programme
 -------
 
-Le programme est divisé en 4 classes : 
+Le programme est divisé en 7 classes principales (8 en comptant la classe de gestion des exceptions) : 
 * __ArduinoInterface.java :__ Cette classe se charge d'ouvrir le port de communication entre l'Arduino et le client Java, d'envoyer des lignes de commandes ou des fichiers de commandes à l'Arduino, et d'afficher les informations et les données qu'envoie l'Arduino. 
+* __ArduinoConfig.java :__ La classe _ArduinoConfig.java_ permet d'enregistrer la configuration précédente de l'Arduino grâce à la classe _SensorRepository.java_ et de recharger cette configuration après un redémarrage de l'Arduino. Cette classe est surtout utile lors d'une utilisation de l'Arduino sur le port série.
 * __DataReceiver.java :__ La classe _DataReceiver.java_ permet d'écrire toutes les données des capteurs renvoyées par l'Arduino dans un fichier json. Chaque données est accompagnée de sa date d'écriture dans le fichier. 
 * __InformationReceiver.java :__ De la même manière que la classe précédente, la classe InformationReceiver.java permet d'enregistrer les informations reçues de la plate-forme Arduino (_rappel : au format "I: &lt;message>"_) dans un journal de log.
 * __SensorData.java :__ Cette classe stock les informations importantes concernants un capteur, c'est à dire son nom au format : &lt;NOM_PC> . &lt;NOM_PORT> . &lt;NOM_CAPTEUR>. Elle stock également la valeur du capteur et la date de récéption de la donnée. 
