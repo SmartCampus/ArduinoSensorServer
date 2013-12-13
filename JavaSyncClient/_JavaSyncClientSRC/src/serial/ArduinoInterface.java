@@ -179,9 +179,9 @@ private synchronized void processReceivedEvent(SerialPortEvent oEvent)
          System.out.println("Received line : " + inputLine);
 
          // Check data type.
-         if (inputLine.startsWith("n:"))
+         if (inputLine.startsWith("D:"))
          {
-            sensorDataReceived(inputLine);
+            sensorDataReceived(inputLine.substring(2));
          }
 
          else if (inputLine.startsWith("R:"))

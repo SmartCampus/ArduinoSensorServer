@@ -1,11 +1,7 @@
 
 package serial;
 
-import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.StringTokenizer;
 
 /**
@@ -24,35 +20,33 @@ private String sensorName;
 private float sensorValue;
 
 /** Time where the info is received */
-private String sensorTime;
+private long sensorTime;
 
 
 /**
  * Default constrctor.
  * Construct a sensor with a String content.
  * 
- * @param informations Sensor informations.
- * @param currentPort  Current serial port.
+ * @param sdata        Sensor data value received from the Arduino.
  * 
  * @throws UnknownHostException Address error.
  */
-public SensorData(String informations, String currentPort)
+public SensorData(String sdata)
 throws UnknownHostException
 {
    // Build the object from the String.
-   StringTokenizer tkz = new StringTokenizer(informations, ": ");
+   StringTokenizer tkz = new StringTokenizer(sdata, ": ");
    while (tkz.hasMoreElements())
    {
       // Build sensor name.
       if (tkz.nextToken().equals("n"))
-         sensorName = InetAddress.getLocalHost().getHostName() + "." + currentPort + "." + tkz.nextToken();
+         sensorName = tkz.nextToken();
 
       // Build sensor value.
       if (tkz.nextToken().equals("v"))
          sensorValue = Float.parseFloat(tkz.nextToken());
-      break;
    }
-   sensorTime = getActualDate();
+   sensorTime = System.currentTimeMillis();
 }
 
 
@@ -67,22 +61,7 @@ public SensorData(String name, float value)
 {
    sensorName = name;
    sensorValue = value;
-   sensorTime = getActualDate();
-}
-
-
-/**
- * Get actual date of the system.
- * 
- * @return The acutal date of the system.
- */
-public String getActualDate()
-{
-   // Build date to the format "yyyy-MM-dd".
-   Date actualDate = new Date();
-   DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-   return df.format(actualDate);
-
+   sensorTime = System.currentTimeMillis();
 }
 
 
@@ -102,7 +81,7 @@ public String getSensorName()
  * 
  * @return Sensor value.
  */
-public float getSensorValue()
+public float getValue()
 {
    return sensorValue;
 }
@@ -113,7 +92,7 @@ public float getSensorValue()
  * 
  * @return Sensor update date.
  */
-public String getSensorDate()
+public long getTime()
 {
    return sensorTime;
 }
@@ -126,9 +105,8 @@ public String getSensorDate()
  */
 public String toString()
 {
-   return "Sensor name: " + sensorName + " value: " + sensorValue + " date: " + sensorTime;
+   return "name: " + sensorName + " value: " + sensorValue + " date: " + sensorTime;
 }
-
 
 /**
  * Program test main.

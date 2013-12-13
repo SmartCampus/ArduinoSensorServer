@@ -8,7 +8,7 @@ import java.util.HashMap;
  * @author  Jean Oudot - IUT Nice / Sophia Antipolis - S4D
  * @version 1.0.0
  */
-public class SensorRepository
+public class SensorDataRepository
 {
 
 /** Map who store all the sensors */
@@ -21,9 +21,9 @@ private HashMap<String, SensorData> sensorsStore = new HashMap<String, SensorDat
  * @param key   Sensor name.
  * @param value Sensor data.
  */
-public void put(String key, SensorData value)
+public void addData(SensorData value)
 {
-   sensorsStore.put(key, value);
+   sensorsStore.put(value.getSensorName(), value);
 }
 
 
@@ -31,7 +31,7 @@ public void put(String key, SensorData value)
  * Get a sensor from its key.
  * 
  * @param key Sensor key (sensor name).
- * @return    The sensor associated to the key.
+ * @return    The sensor associated to the key, null if none.
  */
 public SensorData get(String key)
 {
@@ -48,16 +48,4 @@ public void remove(String key)
 {
    sensorsStore.remove(key);
 }
-
-
-/**
- * Get the current HashMap.
- * 
- * @return The current HashMap.
- */
-public HashMap<String, SensorData> getSensorsMap()
-{
-   return sensorsStore;
-}
-
 }

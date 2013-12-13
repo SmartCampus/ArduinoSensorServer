@@ -1,7 +1,7 @@
 
 package serial;
 
-import java.net.UnknownHostException;
+import java.io.File;
 
 /**
  * Main class of program execution.
@@ -21,40 +21,15 @@ public class Main
 public static void main(String[] args)
 throws Exception
 {
-   // Prepare to get Arduino datas and Arduino informations.
-   final InformationReceiver ir = new InformationReceiver();
-   final DataReceiver dr = new DataReceiver();
-   final String portName = args[0];
-
-   // Create a new Arduino interface (redefine the abstract methods).
-   ArduinoInterface ai = new ArduinoInterface(args[0])
-   {
-      public void sensorDataReceived(String data)
-      {
-         dr.writeData(data, "dataReceived.txt");
-         try
-         {
-            SensorData sd = new SensorData(data, portName);
-            //TODO : add sensor to SensorRepository instance.
-         }
-         catch (UnknownHostException e)
-         {
-            e.printStackTrace();
-         }
-      }
-      
-      public void infoReceived(String data)
-      {
-         // Log the received informations. 
-         ir.informationToLog(data);
-      }
-   };
-
-   // Testing add command.
-   System.out.println("Send file command.");
-   ai.execFileCommand("command1");
-   ai.execCommand("add temperature2 3 4");
-   System.out.println("File command executed.");
+   // Create root directory of all micro controller datas.
+   File rootDir = new File("ControllerDatas");
+   
+   // Create micro controller objects data required in this environnement.
+   String portName = args[0];
+   MicroController mc1 = new MicroController(portName, new File(rootDir, "PORT_" + portName), false);
+   
+   // Test of sensor creation.
+   mc1.getConfig().addSensor("t1", 2, 3);
+   mc1.getConfig().addSensor("t2", 3, 4);
 }
-
 }
