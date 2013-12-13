@@ -27,6 +27,16 @@ Le dossier contient :
 
 Ci-joint : [l'arborescence complète](http://img11.hostingpics.net/pics/327079arboCode.jpg "Arborescence")
 
+Format d'enregistrement des fichiers 
+--------
+Les fichiers enregistrent différement les données qu'ils reçoivent. Vous trouverez ci-après le format de sauvegarde de chacun d'eux. 
+
+#####Dossier _"History"_ 
+Chaque capteur qui renvoie des données crée un fichier portant son nom. Les données sont stockées au format texte (pour le moment), sous la forme : &lt;SENSOR_NAME> &lt;SENSOR_VALUE> &lt;RECEIVED_DATA_DATE>
+
+#####Dossier _"MicroControllerConfig"_ 
+La configuration est enregistré dans un fichier _"config.txt"_, où les données sont stockées sous la forme suivante : &lt;SENSOR_NAME> &lt;PIN_NUMBER> &lt;SENSOR_FREQUENCY>
+
 Exécution du programme 
 --------
 _Attention : Avant toute chose il faut penser à brancher votre micro-contrôleur à votre PC._
@@ -46,7 +56,7 @@ En effet, le client Java attend la réponse de l'Arduino à la commande avant de
 __Remarque :__ Il est important de noter que l'Arduino se reset automatiquement à chaque connexion ou déconnexion du port série. Pour palier à ce problème, un système de sauvegarde de l'ancienne configuration de l'Arduino a été mis en place. 
 
 ###Test #1 : Lancer le programme en mode configuration
-_Attention : La configuration n'est pas créée par défaut. Pour ce faire, lancez le programme une première fois sans rien modifier pour lui permettre d'exécuter des commandes et de créer le fichier de configuration. Voici à quoi devrait ressembler le fichier de configuration une fois crée :_ [fichier de configuration](http://img11.hostingpics.net/pics/118264config.jpg "Configuration")
+_Attention : La configuration n'est pas créée par défaut. Pour ce faire, lancez le programme une première fois sans rien modifier pour lui permettre d'exécuter des commandes et de créer le fichier de configuration. Voici à quoi devrait ressembler le fichier de configuration une fois crée :_ [fichier de configuration](http://img11.hostingpics.net/pics/118264config.jpg "Configuration").
 
 Par défaut, le programme ne se lance pas en mode "configuration", qui permet de récupérer tous les capteurs présents lors de la précédente exécution du programme. Pour activer ce mode, il faut suivre la procédure suivante : 
 
