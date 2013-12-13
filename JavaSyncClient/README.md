@@ -25,7 +25,7 @@ Le dossier contient :
 3. ce dossier contient deux autres dossiers : un dossier _"History"_, contenant un fichier d'historique des valeurs des capteurs (un fichier par capteur branché), et un dossier _"MicroControllerConfig"_, contenant le fichier de configuration du micro-contrôleur.
 4. Un dernier dossier _"lib"_, contenant les .jar des librairies utilisées pour le développement du client Java.
 
-[arborescence complète](http://img11.hostingpics.net/pics/327079arboCode.jpg "Arborescence")
+Ci-joint : [l'arborescence complète](http://img11.hostingpics.net/pics/327079arboCode.jpg "Arborescence")
 
 Exécution du programme 
 --------
@@ -35,7 +35,7 @@ L'ensemble du code source est disponible au chemin ArduinoSensorServer/JavaSyncC
 Il faut copier l'ensemble du répertoire dans votre IDE préféré (les exemples seront réalisés avec Eclipse Juno et Indigo) : 
 
 1. Ouvrir la classe _Main.java_, qui contient le lancement du programme.  
-2. Le port série par défaut est le port COM3. Pour le changer, sous Eclipse, se rendre dans l'onglet _"Run Configurations ..."_ et cliquer sur la table "arguments". Dans la zone _"Program Arguments"_, remplacer _"COM3"_ par le port choisi. 
+2. Le port série par défaut est le port _"COM4"_. Pour le changer, sous Eclipse, se rendre dans l'onglet _"Run Configurations ..."_ et cliquer sur la table "arguments". Dans la zone _"Program Arguments"_, remplacer _"COM4"_ par le port choisi : [configuration du main](http://img11.hostingpics.net/pics/693801mainConfig.jpg "Configuration du main"). 
 3. Cliquer sur "Run" (flèche verte sous Eclipse, ou presser F5) et observer le résultat. 
 
 
