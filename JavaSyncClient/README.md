@@ -46,7 +46,7 @@ En effet, le client Java attend la réponse de l'Arduino à la commande avant de
 __Remarque :__ Il est important de noter que l'Arduino se reset automatiquement à chaque connexion ou déconnexion du port série. Pour palier à ce problème, un système de sauvegarde de l'ancienne configuration de l'Arduino a été mis en place. 
 
 ###Test #1 : Lancer le programme en mode configuration
-_Attention : La configuration n'est pas créée par défaut. Pour ce faire, lancez le programme une première fois sans rien modifier pour lui permettre d'exécuter des commandes et de créer le fichier de configuration._
+_Attention : La configuration n'est pas créée par défaut. Pour ce faire, lancez le programme une première fois sans rien modifier pour lui permettre d'exécuter des commandes et de créer le fichier de configuration. Voici à quoi devrait ressembler le fichier de configuration une fois crée :_ [fichier de configuration](http://img11.hostingpics.net/pics/118264config.jpg "Configuration")
 
 Par défaut, le programme ne se lance pas en mode "configuration", qui permet de récupérer tous les capteurs présents lors de la précédente exécution du programme. Pour activer ce mode, il faut suivre la procédure suivante : 
 
