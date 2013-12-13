@@ -107,17 +107,4 @@ public String toString()
 {
    return "name: " + sensorName + " value: " + sensorValue + " date: " + sensorTime;
 }
-
-/**
- * Program test main.
- * 
- * @param args Main program arguments.
- * @throws UnknownHostException 
- */
-/*public static void main(String[] args)
-throws UnknownHostException
-{
-   SensorData sd = new SensorData("n: temperature2 v: 479.00", "COM3");
-   System.out.println(sd);
-}*/
 }

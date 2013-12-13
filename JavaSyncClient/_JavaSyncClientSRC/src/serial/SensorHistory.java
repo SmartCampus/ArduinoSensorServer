@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * This class manage the history of sensor values for all sensors of one Arduino. 
@@ -63,5 +65,42 @@ throws IOException
    {
       pw.close();
    }
+}
+
+
+/**
+ * Read all datas of a sensor and put them into an array.
+ * 
+ * @param sensorName The sensor you want the datas.
+ * 
+ * @return An array of all datas.
+ * 
+ * @throws IOException      IO error.
+ * @throws ArduinoException Sensor history data file does not exist.
+ */
+public SensorData[] loadHistory(String sensorName)
+throws ArduinoException, IOException
+{
+   // Create the ArrayList of result.
+   ArrayList<SensorData> stockDatas = new ArrayList<SensorData>();
+
+   // Find the file corresponding to the name.
+   File f = new File(rootDirectory, sensorName);
+   if (!(f.exists()))
+      throw new ArduinoException("The file " + f.getCanonicalPath() + "does not exist.");
+
+   // Read the file lines by lines. 
+   Scanner scanner = new Scanner(f);
+   while (scanner.hasNextLine())
+   {
+      // Build the ArrayList of datas.
+      String line = scanner.nextLine();
+      SensorData sd = new SensorData(line);
+      stockDatas.add(sd);      
+   }
+   scanner.close();
+   
+   // Build the result array.
+   return (SensorData[]) stockDatas.toArray();
 }
 }
