@@ -46,12 +46,13 @@ En effet, le client Java attend la réponse de l'Arduino à la commande avant de
 __Remarque :__ Il est important de noter que l'Arduino se reset automatiquement à chaque connexion ou déconnexion du port série. Pour palier à ce problème, un système de sauvegarde de l'ancienne configuration de l'Arduino a été mis en place. 
 
 ###Test #1 : Lancer le programme en mode configuration
+_Attention : La configuration n'est pas créée par défaut. Pour ce faire, lancez le programme une première fois sans rien modifier pour lui permettre d'exécuter des commandes et de créer le fichier de configuration._
 
 Par défaut, le programme ne se lance pas en mode "configuration", qui permet de récupérer tous les capteurs présents lors de la précédente exécution du programme. Pour activer ce mode, il faut suivre la procédure suivante : 
 
 1. Se rendre dans la classe _Main.java_. 
-2. Aller à la ligne n°29 (déclaration du micro-contrôleur) et mettre le 3eme paramètre du constructeur à "true" (mode configuration activé). 
-3. Mettre en commentaire les lignes suivantes. 
+2. Aller à la ligne n°29 (déclaration du micro-contrôleur) et mettre le 3eme paramètre du constructeur à "true" (mode configuration activé) : [Ligne à modifier](http://img11.hostingpics.net/pics/290039lineToModify.jpg "Ligne à modifier"). 
+3. Mettre en commentaire les lignes suivantes : [Lignes à commenter](http://img11.hostingpics.net/pics/899463exampleToComment.jpg "Lignes à commenter"). 
 4. Lancer le programme.
 
 Dans la console, vous pouvez voir la bonne exécution du programme. Une fois le programme fermé (ou pendant son exécution), l'historique des données reçues peut-être consulté au chemin suivant : 
