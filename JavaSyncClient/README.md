@@ -19,6 +19,7 @@ Le programme est divisé en 10 classes principales (11 en comptant la classe de 
 Arborescence du dossier
 --------
 Le dossier contient : 
+
 1. les sources du programmes, situées dans le package _"serial"_,
 2. un dossier _"ControllerData"_, contenant un dossier portant le nom du port où le capteur est branché,
 3. ce dossier contient deux autres dossiers : un dossier _"History"_, contenant un fichier d'historique des valeurs des capteurs (un fichier par capteur branché), et un dossier _"MicroControllerConfig"_, contenant le fichier de configuration du micro-contrôleur.
