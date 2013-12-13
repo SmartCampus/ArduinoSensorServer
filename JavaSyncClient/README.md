@@ -4,31 +4,29 @@ README : Client Java synchrone
 Structure du programme
 -------
 
-Le programme est divisé en 7 classes principales (8 en comptant la classe de gestion des exceptions) : 
+Le programme est divisé en 10 classes principales (11 en comptant la classe de gestion des exceptions) : 
 * __ArduinoInterface.java :__ Cette classe se charge d'ouvrir le port de communication entre l'Arduino et le client Java, d'envoyer des lignes de commandes ou des fichiers de commandes à l'Arduino, et d'afficher les informations et les données qu'envoie l'Arduino. 
-* __ArduinoConfig.java :__ La classe _ArduinoConfig.java_ permet d'enregistrer la configuration précédente de l'Arduino grâce à la classe _SensorRepository.java_ et de recharger cette configuration après un redémarrage de l'Arduino. Cette classe est surtout utile lors d'une utilisation de l'Arduino sur le port série.
+* __MicroController.java :__ Cette reprèsente un micro-contrôleur dans son ensemble. Elle permet de créer une configuration, une interface, un repository et un historique de ses données et de ses capteurs. C'est la classe principale à créer dans le main. 
+* __MicroControllerConfig.java :__ La classe _MicroControllerConfig.java_ permet d'enregistrer la configuration précédente du micro-contrôleur et de recharger cette configuration après un redémarrage de ce dernier. Cette classe permet d'ajouter ou de supprimer des capteurs.
 * __DataReceiver.java :__ La classe _DataReceiver.java_ permet d'écrire toutes les données des capteurs renvoyées par l'Arduino dans un fichier json. Chaque données est accompagnée de sa date d'écriture dans le fichier. 
 * __InformationReceiver.java :__ De la même manière que la classe précédente, la classe InformationReceiver.java permet d'enregistrer les informations reçues de la plate-forme Arduino (_rappel : au format "I: &lt;message>"_) dans un journal de log.
-* __SensorData.java :__ Cette classe stock les informations importantes concernants un capteur, c'est à dire son nom au format : &lt;NOM_PC> . &lt;NOM_PORT> . &lt;NOM_CAPTEUR>. Elle stock également la valeur du capteur et la date de récéption de la donnée. 
-* __SensorRepository :__ Il s'agit de la "base de données" de nos capteurs. Ils sont stockés dans un dictionnaire au format &lt;NOM_CAPTEUR>, &lt;SensorData>. Elle permet également la génération de la configuration précédente de l'Arduino. _Cette classe est en cours de développement et d'intégration et n'est pas encore présente dans le package actuel._ 
+* __SensorData.java :__ Cette classe stock les informations envoyées par un capteur depuis le micro-contrôleur. Ces informations sont au format : &lt;NOM_CAPTEUR> &lt;VALEUR> &lt;TEMPS>. Le temps est en millisecondes.
+* __SensorDataRepository :__ Il s'agit de la "base de données" de nos capteurs. Ils sont stockés dans un dictionnaire au format &lt;clé : NOM_CAPTEUR> &lt;valeur : SENSOR_DATA>. 
+* __SensorDescriptor.java :__ Cette classe continet la description d'un capteur, à savoir son nom, le pin où il est branché et sa fréquence d'envoie des données. Cette classe permet l'exécution de commandes comme add ou delete.
+* __SensorHistory.java :__ Cette classe créée l'historique des données de chaque capteurs dans le temps. Chaque capteur possède son propre fichier d'historique de données dédié. 
 * __Main.java :__ Il s'agit de la classe exécutant le client Java. Il y a, en argument du programme, le nom du port utilisé par l'Arduino (ici le port COM3). 
 
-Attention toutefois, certains problèmes subsistent encore. En effet, il existe un certain délai de communication entre un ordinateur et une plate-forme Arduino. De même, le temps de traitement de certaines données dépend grandement de la vitesse de traitement du processur. 
-La méthode &lt;execCommand(String command)> de la classe ArduinoInterface.java contient un &lt;Thread.sleep(1500)>, qui est, pour le moment, obligatoire. 
-Il est possible que la valeur 1500 ne soit pas suffisante pour votre ordinateur. Dans ce cas, n'hésitez pas à l'augmenter. 
 
 Exécution du programme 
 --------
+_Attention : Avant toute chose il faut penser à brancher votre micro-contrôleur à votre PC._
 
 L'ensemble du code source est disponible au chemin ArduinoSensorServer/JavaSyncClient/_JavaSyncClientSRC  
 Il faut copier l'ensemble du répertoire dans votre IDE préféré (les exemples seront réalisés avec Eclipse Juno et Indigo) : 
 
-1. Ouvrir la classe Main.java, qui contient le lancement du programme.  
+1. Ouvrir la classe _Main.java_, qui contient le lancement du programme.  
 2. Le port série par défaut est le port COM3. Pour le changer, sous Eclipse, se rendre dans l'onglet _"Run Configurations ..."_ et cliquer sur la table "arguments". Dans la zone _"Program Arguments"_, remplacer _"COM3"_ par le port choisi. 
-3. De retour dans la classe Main.java, le fichier de commande par défaut est _"command1.txt"_. Comme précédemment, le contenu de se fichier peut-être changer. Pour cela, il faut se rendre à la racine du projet et ouvrir le fichier "command1.txt". Il suffit ensuite de changer les commandes avec la syntaxe correspondante (voir README.md principal). Il est également possible de créer son propre fichier de commande, il faudra donc passer le chemin correspondant en paramètre. 
-4. Cliquer sur "Run" (flèche verte sous Eclipse, ou presser F5) et observer le résultat. 
-5. Le fichier stockant les données après exécution du client est "dataReceived.json", à la racine du projet.
-6. Le journal de log contenant les données est _"informationLog.log"_, à la racine du projet. 
+3. Cliquer sur "Run" (flèche verte sous Eclipse, ou presser F5) et observer le résultat. 
 
 
 __Attention !__ Le répertoire _lib_ contient les librairies (.jar) nécessaires au fonctionnement du projet, à savoir la librairie RXTX, qui permet la communication avec le port série. 
@@ -36,5 +34,28 @@ Lors de l'exécution du client Java et particulièrement lors de l'envoi des lig
 En effet, le client Java attend la réponse de l'Arduino à la commande avant de continuer à affichier ou à envoyer quoi que ce soit. La communication série n'étant pas instantanée, il est possible qu'il y ai une attente. 
 
 __Remarque :__ Il est important de noter que l'Arduino se reset automatiquement à chaque connexion ou déconnexion du port série. Pour palier à ce problème, un système de sauvegarde de l'ancienne configuration de l'Arduino a été mis en place. 
-Vous trouverez dans votre répertoire principal un fichier _oldCommand.txt_ contenant les commandes permettant de revenir à la configuraton précédente de votre Arduino, en cas de bug ou de déconnexion du port série. 
-Il vous suffira de passer ce fichier en paramètre de la fonction &lt;execFileCommand(String filePath)> pour retrouver l'état précédent.  
+
+###Test #1 : Lancer le programme en mode configuration
+
+Par défaut, le programme ne se lance pas en mode "configuration", qui permet de récupérer tous les capteurs présents lors de la précédente exécution du programme. Pour activer ce mode, il faut suivre la procédure suivante : 
+
+1. Se rendre dans la classe _Main.java_. 
+2. Aller à la ligne n°29 (déclaration du micro-contrôleur) et mettre le 3eme paramètre du constructeur à "true" (mode configuration activé). 
+3. Mettre en commentaire les lignes suivantes. 
+4. Lancer le programme.
+
+Dans la console, vous pouvez voir la bonne exécution du programme. Une fois le programme fermé (ou pendant son exécution), l'historique des données reçues peut-être consulté au chemin suivant : 
+SerialFinal/ControllerDatas/PORT_COMX/history/NOM_CAPTEUR . 
+
+COMX est remplacé par COM3, COM4, COM5 ... Tout dépendant du numéro de port entré comme paramètre de la classe _Main.java_.
+
+###Test #2 : Lancer le programme sans le mode configuration 
+
+Le programme se lance sans le mode configuration, par défaut. Toutefois, si vous avez suivi l'exemple précédent, il faut de nouveau modifier le 3eme argument du constructeur du micro-contrôleur à la ligne 29 et le mettre à "false".
+Il faut également enlever les commentaires des lignes suivants la déclaration du micro-contrôleur. 
+
+Pour ajouter un capteur, il suffit de taper &lt;mc1.getConfig().addSensor("NOM_CAPTEUR", PIN_CAPTEUR, FREQ_CAPTEUR);> . Pour en supprimer un, il faut taper :  &lt;mc1.getConfig().delSensor("NOM_CAPTEUR);>. Cela supprimera le capteur indiqué. 
+
+__Remarque :__ Le fichier de configuration du micro-contrôleur ne retient que les capteurs qui n'ont pas été supprimés pendant l'exécution du programme. Si vous créez une capteur "t3" et que vous le supprimez après, il est normal qu'il n'apparaisse pas dans le fichier de configuration. 
+
+
