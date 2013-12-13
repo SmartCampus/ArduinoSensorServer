@@ -25,6 +25,8 @@ Le dossier contient :
 3. ce dossier contient deux autres dossiers : un dossier _"History"_, contenant un fichier d'historique des valeurs des capteurs (un fichier par capteur branché), et un dossier _"MicroControllerConfig"_, contenant le fichier de configuration du micro-contrôleur.
 4. Un dernier dossier _"lib"_, contenant les .jar des librairies utilisées pour le développement du client Java.
 
+[arborescence complète](http://img11.hostingpics.net/pics/327079arboCode.jpg "Arborescence")
+
 Exécution du programme 
 --------
 _Attention : Avant toute chose il faut penser à brancher votre micro-contrôleur à votre PC._
