@@ -24,8 +24,6 @@ Les commandes actuellement disponibles, ainsi que leur syntaxe, sont les suivant
 * __listsensors__
 * __timestamp__
 * __resetsensors__
-* __end__
-* __begin__
 
 Description des paramètres 
 --------
@@ -45,8 +43,6 @@ Description des commandes
 * __listsensors :__ Récupère les noms de tous les capteurs branchés à la plate-forme Arduino et les affiche sur une ligne.
 * __timestamp :__ Affiche depuis combien de temps (en secondes) tourne le programme sur l'Arduino. 
 * __resetsensors :__ Efface toute la table contenant les capteurs de la plate-forme Arduino.
-* __end :__ Arrête la communication série entre l'Arduino et l'ordinateur. 
-* __begin :__ Démarre la communication série entre l'Arduino et l'ordinateur. Cette commande ne fonctionne qu'après l'appel de la commande "end". 
 
 Attention, il n'est possible que de récupérer les données envoyées par des capteurs analogiques. Les capteurs digitaux ne sont pas pris en compte pour le moment.
 
