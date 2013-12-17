@@ -232,7 +232,7 @@ boolean listCommand()
     return false;
     
   // Print all the sensors. 
-  Serial.print("R: Sensor array ");
+  Serial.print("D: Sensor array ");
   while ((sid = getNextAvailableSensor(sid)) >= 0)
   {
     Serial.print("|"); Serial.print("Sensor Name : "); Serial.print(getSensorName(sid)); 
@@ -255,7 +255,7 @@ boolean listsensorsCommand()
     return false;
     
   // Print all sensors name.
-  Serial.print("R:");
+  Serial.print("D:");
   while((sid = getNextAvailableSensor(sid)) >= 0)
   {
     Serial.print(" "); Serial.print(getSensorName(sid));  
@@ -280,7 +280,7 @@ boolean sensorinfoCommand(String name)
     return false;
   
   // Print sensor informations.
-  Serial.print("R: ");
+  Serial.print("D: ");
   Serial.print("name : "); Serial.print(getSensorName(sid)); 
   Serial.print(" id : "); Serial.print(sid); Serial.print(" pin : ");Serial.print(getSensorPinNumber(sid)); Serial.print(" frequency : ");  Serial.print(getSensorFrequency(sid)); Serial.println();
   return true;
@@ -299,7 +299,7 @@ boolean timeStampCommand()
   int time = boardTime();
   if (time < 0)
     return false;
-  Serial.print("R: Arduino time : "); Serial.print(time); Serial.println(" ms.");
+  Serial.print("D: Arduino time : "); Serial.print(time); Serial.println(" ms.");
   return true;
 }
 
