@@ -12,11 +12,11 @@ import java.io.File;
 public class MicroController
 {
 
-/** Sensor history */
+/** Sensors history */
 private SensorHistory history;
 
-/** Sensor data */
-private SensorDataRepository repository;
+/** Sensors data */
+private LastSensorDataRepository repository;
 
 /** Arduino configuration */
 private MicroControllerConfig config;
@@ -41,7 +41,7 @@ throws Exception
    rdir.mkdirs();
 
    // Create the sensors data repository.
-   repository = new SensorDataRepository();
+   repository = new LastSensorDataRepository();
 
    // Create the sensors data history.
    history = new SensorHistory(new File(rdir, "History"));
@@ -95,7 +95,7 @@ public MicroControllerConfig getConfig()
  * 
  * @return The micro controller sensor repository.
  */
-public SensorDataRepository getRepository()
+public LastSensorDataRepository getRepository()
 {
    return repository;
 }

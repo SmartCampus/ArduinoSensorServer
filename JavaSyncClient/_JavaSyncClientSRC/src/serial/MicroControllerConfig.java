@@ -22,7 +22,7 @@ public class MicroControllerConfig
 {
 
 /** The database of sensors */
-private SensorDataRepository repository;
+private LastSensorDataRepository repository;
 
 /** Arduino Interface */
 private ArduinoInterface arduinoInterface;
@@ -48,7 +48,7 @@ public MicroControllerConfig(ArduinoInterface ai, File dir, boolean configMode)
 throws IOException, InterruptedException
 {
    // Build variables.
-   repository = new SensorDataRepository();
+   repository = new LastSensorDataRepository();
    arduinoInterface = ai;
    sensorsDescriptions = new HashMap<String, SensorDescriptor>();
 

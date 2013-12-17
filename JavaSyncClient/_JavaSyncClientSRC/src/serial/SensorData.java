@@ -5,7 +5,13 @@ import java.net.UnknownHostException;
 import java.util.StringTokenizer;
 
 /**
- * Model the sensor data and informations, like name, time and sensor value. 
+ * Model the sensor data and informations, like name, time and sensor value.
+ * Name is duplicate because we can manipulate sensors data where sensors have disappear.
+ * Separate config problem (data and admin command). less the component are link, better is.
+ * not necessary to link them.
+ * 
+ * Argument : Arduino can not save its own configuration (auto reset), keep the a disappear sensor data and manipulate them (
+ * no description in the config).
  * 
  * @author  Jean Oudot - IUT Nice / Sophia Antipolis - S4D
  * @version 1.0.0
@@ -13,7 +19,7 @@ import java.util.StringTokenizer;
 public class SensorData
 {
 
-/** Sensor name in the following format : <PC_NAME>.<PORT_NAME>.<SENSOR_NAME> */
+/** Sensor name in the following format : <PORT_NAME>.<SENSOR_NAME> */
 private String sensorName;
 
 /** Sensor value */
@@ -105,6 +111,6 @@ public long getTime()
  */
 public String toString()
 {
-   return "name: " + sensorName + " value: " + sensorValue + " date: " + sensorTime;
+   return "value: " + sensorValue + " date: " + sensorTime;
 }
 }

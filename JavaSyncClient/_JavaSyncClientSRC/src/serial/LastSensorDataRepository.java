@@ -3,12 +3,12 @@ package serial;
 import java.util.HashMap;
 
 /**
- * Store all sensors to build the Arduino configuration.
+ * Store all the last sensors data.
  * 
  * @author  Jean Oudot - IUT Nice / Sophia Antipolis - S4D
  * @version 1.0.0
  */
-public class SensorDataRepository
+public class LastSensorDataRepository
 {
 
 /** Map who store all the sensors */

@@ -30,6 +30,7 @@ throws Exception
    
    // Test of sensor creation.
    mc1.getConfig().addSensor("t1", 2, 3);
-   mc1.getConfig().addSensor("t2", 3, 4);
+   mc1.getConfig().addSensor("t2", 2 ,3);
+
 }
 }
