@@ -83,7 +83,26 @@ String execCommand(String cmd)
       return INVALID_PARAM;
       
   }
-  
+  else if (commandName.equals("boardid"))
+  {
+    printBoardId();
+  }
+  else if (commandName.equals("sleep"))
+  {
+    // Get sensor name.
+    String sname = nextToken();
+    
+    if (!(changeStatus(sname,0)))
+      return INVALID_PARAM;
+  }
+  else if (commandName.equals("wakeup"))
+  {
+    // Get sensor name.
+    String sname = nextToken();
+    
+    if (!(changeStatus(sname,1)))
+      return INVALID_PARAM;
+  }
   else 
   {
     return "R: Unknown command."; 
@@ -303,6 +322,10 @@ boolean timeStampCommand()
   return true;
 }
 
+boolean changeStatus(String sname, int sstatus)
+{
+  return changeSensorStatus(sname, sstatus);  
+}
 
 /**
  * Clear the sensors table.
@@ -314,5 +337,13 @@ void resetSensorsCommand()
   clearTable();
 }
 
+/**
+* Get Arduino board ID
+*
+*/
+void printBoardId()
+{
+  Serial.println(getId());
+}
 
  
