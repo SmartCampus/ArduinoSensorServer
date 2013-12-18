@@ -40,7 +40,7 @@ void refreshSensorData(int sid)
 */
 void printDataJson(String sensorName, int sensorValue, unsigned long timestamp){
    // Start JSON
-   Serial.print("{");
+   Serial.print("D: {");
    // Display sensor's name
    Serial.print("\"n\":\"");Serial.print(sensorName);Serial.print("\",");
    // Display value

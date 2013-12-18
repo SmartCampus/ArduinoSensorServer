@@ -343,7 +343,7 @@ void resetSensorsCommand()
 */
 void printBoardId()
 {
-  Serial.println(getId());
+  Serial.println("D: " + getId());
 }
 
  
