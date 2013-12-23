@@ -3,6 +3,7 @@
 /** Check if the setup is done or not */
 boolean initDone = false;
 
+
 void setup()
 {
   Serial.begin(9600);
@@ -13,11 +14,9 @@ void setup()
   {
     Serial.println("I: Arduino setup finished.");
     initDone = true;
-  }
-  
-  
-  
+  } 
 }
+
 
 void loop()
 {  
@@ -44,11 +43,12 @@ void loop()
   delay(1000);
 }
 
+
 /**
-* Get Board Unique ID (BUID)
-*
-* return Board ID
-*/
+ * Get Board Unique ID (BUID)
+ *
+ * return Board ID
+ */
 String getId(){
     return BOARD_ID; 
 }

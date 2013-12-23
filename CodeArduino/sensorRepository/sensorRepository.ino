@@ -12,6 +12,7 @@ class Sensor
     int refreshDataFrequency;      // Refresh data frequency.
     unsigned long nextUpdateTime;  // Next update time of the sensor.
     int isEnabled;                 // Sensor status (0=disabled, 1=enabled)
+    
     /**
      * Normal constructor.
      */  

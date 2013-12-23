@@ -44,11 +44,11 @@ void printDataJson(String sensorName, int sensorValue, unsigned long timestamp){
    // Display sensor's name
    Serial.print("\"n\":\"");Serial.print(sensorName);Serial.print("\",");
    // Display value
-   Serial.print("\"v\":\"");Serial.print(sensorValue);Serial.print("\",");
+   Serial.print("\"v\":");Serial.print(sensorValue);Serial.print(",");
    // Display timestamp
-   Serial.print("\"t\":\"");Serial.print(timestamp);
+   Serial.print("\"t\":");Serial.print(timestamp);
    // Close JSON
-   Serial.println("\"}");
+   Serial.println("}");
 }
 
 

@@ -5,13 +5,13 @@ String theCommand;
 int readIndex; 
 
 /** No command case */
-const String NO_COMMAND = "R: No command to process";
+const String NO_COMMAND = "R: 3 No command to process";
 
 /** Invalid parameters */
-const String INVALID_PARAM = "R: Invalid parmeters.";
+const String INVALID_PARAM = "R: 2 Invalid parmeters.";
 
 /** Command accepted */
-const String OK_COMMAND = "R: Command OK.";
+const String OK_COMMAND = "R: 1 Command OK.";
 
 
 /**
@@ -87,6 +87,7 @@ String execCommand(String cmd)
   {
     printBoardId();
   }
+  
   else if (commandName.equals("sleep"))
   {
     // Get sensor name.
@@ -95,6 +96,7 @@ String execCommand(String cmd)
     if (!(changeStatus(sname,0)))
       return INVALID_PARAM;
   }
+  
   else if (commandName.equals("wakeup"))
   {
     // Get sensor name.
@@ -103,12 +105,11 @@ String execCommand(String cmd)
     if (!(changeStatus(sname,1)))
       return INVALID_PARAM;
   }
+  
   else 
   {
-    return "R: Unknown command."; 
+    return "R: 4 Unknown command."; 
   }
-  
-  return OK_COMMAND;
 }
 
 
@@ -306,10 +307,8 @@ boolean sensorinfoCommand(String name)
 }
 
 
-
 /**
  * Get Arduino board current time. 
- *
  *
  * return : true if good execution, false if not.
  */
@@ -322,10 +321,18 @@ boolean timeStampCommand()
   return true;
 }
 
+
+/**
+ * Change the status of a sensor.
+ *
+ * sname    : Sensor name.
+ * sstatuts : New sensor status.
+ */
 boolean changeStatus(String sname, int sstatus)
 {
   return changeSensorStatus(sname, sstatus);  
 }
+
 
 /**
  * Clear the sensors table.
@@ -337,13 +344,14 @@ void resetSensorsCommand()
   clearTable();
 }
 
+
 /**
-* Get Arduino board ID
-*
-*/
+ * Get Arduino board ID
+ *
+ */
 void printBoardId()
 {
-  Serial.println("D: " + getId());
+  Serial.println("R: " + getId());
 }
 
  
