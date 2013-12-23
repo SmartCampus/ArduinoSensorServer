@@ -11,7 +11,8 @@ class Sensor
     int pin;                       // Arduino pin where the sensor is plugged.
     int refreshDataFrequency;      // Refresh data frequency.
     unsigned long nextUpdateTime;  // Next update time of the sensor.
-   
+    int isEnabled;                 // Sensor status (0=disabled, 1=enabled)
+    
     /**
      * Normal constructor.
      */  
@@ -22,6 +23,7 @@ class Sensor
       name = n;
       //pinMode(pin, isOut);
       nextUpdateTime = millis();
+      isEnabled = 1;
     }  
 };
 
@@ -204,7 +206,7 @@ int getNextSensorToQuery()
   int i; 
   for (i = 0; i < MAX_SENSORS; i++)
   {
-    if ((sensorTab[i] != NULL) && (sensorTab[i]->nextUpdateTime <= time))
+    if ((sensorTab[i] != NULL) && (sensorTab[i]->nextUpdateTime <= time) && (sensorTab[i]->isEnabled == 1))
       return i;
   }
   
@@ -234,6 +236,7 @@ int getNextAvailableSensor(int firstId)
   // No more sensors available.
   return -1;
 }
+
 
 
 /**
@@ -290,6 +293,16 @@ void clearTable()
   }
 }
 
+boolean changeSensorStatus(String sname, int newStatus)
+{
+  // Check is sensor exists
+  if(!(isSensorExists(getSensorByName(sname))))
+    return false;
+    
+  // Update sensor status
+  sensorTab[getSensorByName(sname)]->isEnabled = newStatus;
+  return true;
+}
 
 /**
  * Update the next update time of the sensor.

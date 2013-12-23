@@ -5,13 +5,13 @@ String theCommand;
 int readIndex; 
 
 /** No command case */
-const String NO_COMMAND = "R: No command to process";
+const String NO_COMMAND = "R: 3 No command to process";
 
 /** Invalid parameters */
-const String INVALID_PARAM = "R: Invalid parmeters.";
+const String INVALID_PARAM = "R: 2 Invalid parmeters.";
 
 /** Command accepted */
-const String OK_COMMAND = "R: Command OK.";
+const String OK_COMMAND = "R: 1 Command OK.";
 
 
 /**
@@ -83,13 +83,33 @@ String execCommand(String cmd)
       return INVALID_PARAM;
       
   }
+  else if (commandName.equals("boardid"))
+  {
+    printBoardId();
+  }
+  
+  else if (commandName.equals("sleep"))
+  {
+    // Get sensor name.
+    String sname = nextToken();
+    
+    if (!(changeStatus(sname,0)))
+      return INVALID_PARAM;
+  }
+  
+  else if (commandName.equals("wakeup"))
+  {
+    // Get sensor name.
+    String sname = nextToken();
+    
+    if (!(changeStatus(sname,1)))
+      return INVALID_PARAM;
+  }
   
   else 
   {
-    return "R: Unknown command."; 
+    return "R: 4 Unknown command."; 
   }
-  
-  return OK_COMMAND;
 }
 
 
@@ -232,7 +252,7 @@ boolean listCommand()
     return false;
     
   // Print all the sensors. 
-  Serial.print("D: Sensor array ");
+  Serial.print("R: Sensor array ");
   while ((sid = getNextAvailableSensor(sid)) >= 0)
   {
     Serial.print("|"); Serial.print("Sensor Name : "); Serial.print(getSensorName(sid)); 
@@ -255,7 +275,7 @@ boolean listsensorsCommand()
     return false;
     
   // Print all sensors name.
-  Serial.print("D:");
+  Serial.print("R:");
   while((sid = getNextAvailableSensor(sid)) >= 0)
   {
     Serial.print(" "); Serial.print(getSensorName(sid));  
@@ -280,17 +300,15 @@ boolean sensorinfoCommand(String name)
     return false;
   
   // Print sensor informations.
-  Serial.print("D: ");
+  Serial.print("R: ");
   Serial.print("name : "); Serial.print(getSensorName(sid)); 
   Serial.print(" id : "); Serial.print(sid); Serial.print(" pin : ");Serial.print(getSensorPinNumber(sid)); Serial.print(" frequency : ");  Serial.print(getSensorFrequency(sid)); Serial.println();
   return true;
 }
 
 
-
 /**
  * Get Arduino board current time. 
- *
  *
  * return : true if good execution, false if not.
  */
@@ -299,8 +317,20 @@ boolean timeStampCommand()
   int time = boardTime();
   if (time < 0)
     return false;
-  Serial.print("D: Arduino time : "); Serial.print(time); Serial.println(" ms.");
+  Serial.print("R: Arduino time : "); Serial.print(time); Serial.println(" ms.");
   return true;
+}
+
+
+/**
+ * Change the status of a sensor.
+ *
+ * sname    : Sensor name.
+ * sstatuts : New sensor status.
+ */
+boolean changeStatus(String sname, int sstatus)
+{
+  return changeSensorStatus(sname, sstatus);  
 }
 
 
@@ -314,5 +344,14 @@ void resetSensorsCommand()
   clearTable();
 }
 
+
+/**
+ * Get Arduino board ID
+ *
+ */
+void printBoardId()
+{
+  Serial.println("R: " + getId());
+}
 
  
