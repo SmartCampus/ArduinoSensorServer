@@ -21,6 +21,8 @@ Les commandes actuellement disponibles, ainsi que leur syntaxe, sont les suivant
 * __del__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName> 
 * __freq__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName> &lt;newFrequency>
 * __sensorinfo__ &lt;sensorName>
+* __sleep__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName>
+* __wakeup__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName>
 * __listsensors__
 * __timestamp__
 * __resetsensors__
@@ -43,6 +45,9 @@ Description des commandes
 * __listsensors :__ Récupère les noms de tous les capteurs branchés à la plate-forme Arduino et les affiche sur une ligne.
 * __timestamp :__ Affiche depuis combien de temps (en secondes) tourne le programme sur l'Arduino. 
 * __resetsensors :__ Efface toute la table contenant les capteurs de la plate-forme Arduino.
+* __boardid :__ Récupère le numéro de la plate forme Arduino.
+* __sleep :__ Endort le capteur choisi (stop l'envoie de ses données).
+* __wakeup :__ Réveille le capteur choisi, si il était endormi (relance l'envoie des données).
 
 Attention, il n'est possible que de récupérer les données envoyées par des capteurs analogiques. Les capteurs digitaux ne sont pas pris en compte pour le moment.
 
