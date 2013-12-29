@@ -4,15 +4,15 @@ String theCommand;
 /** Actual read index */
 int readIndex; 
 
-/** No command case */
-const String NO_COMMAND = "R: 3 No command to process";
-
-/** Invalid parameters */
-const String INVALID_PARAM = "R: 2 Invalid parmeters.";
-
-/** Command accepted */
-const String OK_COMMAND = "R: 1 Command OK.";
-
+/** Return messages */
+const String RETURN_OK           = "R: 0 Command OK.";
+const String RETURN_INVALIDPARAM = "R: 1 Invalid parmeters.";
+const String RETURN_NOCOMMAND    = "R: 2 No command to process.";
+const String RETURN_NAMEUSED     = "R: 3 Name already in use.";
+const String RETURN_PINUSED      = "R: 4 Pin already in use.";
+const String RETURN_NOSENSOR     = "R: 5 No sensor to display.";
+const String RETURN_TIMEERROR    = "R: 6 Time not available for this sensor.";
+const String RETURN_UKNOWNCMD   = "R: 7 Uknown command.";
 
 /**
  * Execute a command from a string. 
@@ -25,7 +25,7 @@ String execCommand(String cmd)
 {
   // Check if no command.
   if (cmd == NULL)
-    return NO_COMMAND;
+    return RETURN_NOCOMMAND;
     
   // Store command to process.
   theCommand = cmd;
@@ -34,33 +34,28 @@ String execCommand(String cmd)
   
   // Get command name. 
   String commandName = nextToken();
-  // Serial.print("Command name : "); Serial.println(commandName);
   if (commandName == NULL)
-    return NO_COMMAND;
+    return RETURN_NOCOMMAND;
   
-  // Check command to execute.
+  // Check command to execute. 
   if (commandName.equals("add"))
   {
-    if (!(addCommand()))
-      return INVALID_PARAM;
+    return execCommandAdd();
   }
   
   else if (commandName.equals("del"))
   {
-    if (!(delCommand()))
-      return INVALID_PARAM;
+    return execCommandDel();
   }
   
   else if (commandName.equals("freq"))
   {
-     if (!(freqCommand())) 
-       return INVALID_PARAM;
+     return execCommandFreq();
   }
   
   else if (commandName.equals("listsensors"))
   {
-    if (!(listsensorsCommand()))
-      return INVALID_PARAM;
+     return execCommandListSensors();
   }
   
   else if (commandName.equals("sensorinfo"))
@@ -68,47 +63,43 @@ String execCommand(String cmd)
     // Get sensor name.
     String sname = nextToken();
     
-    if (!(sensorinfoCommand(sname)))
-      return INVALID_PARAM;
+    return execCommandSensorInfo(sname);
   }
   
   else if (commandName.equals("resetsensors"))
   {
-    resetSensorsCommand();
+    return execCommandResetSensors();
   }
   
   else if (commandName.equals("timestamp"))
   {
-    if (!(timeStampCommand()))
-      return INVALID_PARAM;
-      
+    return execCommandTimeStamp();      
   }
+  
   else if (commandName.equals("boardid"))
   {
-    printBoardId();
+    return execCommandBoardId();
   }
   
-  else if (commandName.equals("sleep"))
+  else if (commandName.equals("suspend"))
   {
     // Get sensor name.
     String sname = nextToken();
     
-    if (!(changeStatus(sname,0)))
-      return INVALID_PARAM;
+    return execCommandSuspend(sname);
   }
   
-  else if (commandName.equals("wakeup"))
+  else if (commandName.equals("resume"))
   {
     // Get sensor name.
     String sname = nextToken();
     
-    if (!(changeStatus(sname,1)))
-      return INVALID_PARAM;
+    return execCommandResume(sname);
   }
   
   else 
   {
-    return "R: 4 Unknown command."; 
+    return RETURN_UKNOWNCMD; 
   }
 }
 
@@ -165,12 +156,18 @@ int nextTokenInt()
 }
 
 
+/*******************************************************************************************
+ * Commands list.
+ * You can add command at the end of this section.
+ *******************************************************************************************/
+
+
 /**
  * Add a sensor to the Arduino platform.
  *
  * return : true if good command execution, false if not.
  */
-boolean addCommand()
+String execCommandAdd()
 {
    // Get sensor name.
     String sname = nextToken();
@@ -183,11 +180,17 @@ boolean addCommand()
     
     // Check parameters. 
     if ((sname == NULL) || (pinNumber < 0) || (frequency < 0))
-      return false;
+      return RETURN_INVALIDPARAM;
     
+    // Check if name or pin number are already in use.
+    if (getSensorByName(sname) >= 0)
+      return RETURN_NAMEUSED;
+    if (getSensorByPinNumber(pinNumber) >= 0)
+      return RETURN_PINUSED;        
+
     // Add the new sensor and return.
     addSensor(sname, pinNumber, frequency, true);
-    return true;
+    return RETURN_OK;
 }
 
 
@@ -196,7 +199,7 @@ boolean addCommand()
  *
  * return : true if good execution, false if not.
  */
-boolean delCommand()
+String execCommandDel()
 {
   // Get sensor name.
   String sname = nextToken();
@@ -206,11 +209,11 @@ boolean delCommand()
   
   // Check parameters. 
   if ((sname == NULL) || (sid < 0))
-    return false;
+    return RETURN_INVALIDPARAM;
   
   // Delete the sensor (by name).
   deleteByName(sname); 
-  return true;
+  return RETURN_OK;
 }
 
 
@@ -219,7 +222,7 @@ boolean delCommand()
  *
  * return : true if good execution, false if not.
  */
-boolean freqCommand()
+String execCommandFreq()
 {
   // Get the pin number. 
   String sname = nextToken();
@@ -229,14 +232,14 @@ boolean freqCommand()
   
   // Check parameters. 
   if ((sname == NULL) || (sid < 0))
-    return false;
+    return RETURN_INVALIDPARAM;
     
   // Get the new frequency.
   int newFrequency = nextTokenInt();
   
   // Change the data refresh rate. 
   changeDataFrequencyByName(sname, newFrequency); 
-  return true;
+  return RETURN_OK;
 }
 
 
@@ -245,11 +248,11 @@ boolean freqCommand()
  *
  * return : true if good execution, false if not.
  */ 
-boolean listCommand()
+String execCommandList()
 {
   int sid = 0;
   if (getNextAvailableSensor(sid) < 0) 
-    return false;
+    return RETURN_NOSENSOR;
     
   // Print all the sensors. 
   Serial.print("R: Sensor array ");
@@ -259,7 +262,7 @@ boolean listCommand()
     Serial.print(" | sensor ID : "); Serial.print(sid); Serial.print(" | sensor frequency : "); Serial.print(getSensorFrequency(sid)); Serial.print(" |"); Serial.println();
     sid++;
   } 
-  return true;  
+  return RETURN_OK;  
 }
 
 
@@ -268,11 +271,11 @@ boolean listCommand()
  *
  * return : true if good execution, false if not.
  */
-boolean listsensorsCommand()
+String execCommandListSensors()
 {
   int sid = 0; 
   if (getNextAvailableSensor(sid) < 0)
-    return false;
+    return RETURN_NOSENSOR;
     
   // Print all sensors name.
   Serial.print("R:");
@@ -283,7 +286,7 @@ boolean listsensorsCommand()
   }
   
   Serial.println();
-  return true;
+  return RETURN_OK;
 }
 
 
@@ -292,18 +295,18 @@ boolean listsensorsCommand()
  *
  * return : true if good execution, false if not.
  */
-boolean sensorinfoCommand(String name)
+String execCommandSensorInfo(String name)
 {
   // Get sensor ID.
   int sid = getSensorByName(name);
   if (sid < 0)
-    return false;
+    return RETURN_INVALIDPARAM;
   
   // Print sensor informations.
   Serial.print("R: ");
   Serial.print("name : "); Serial.print(getSensorName(sid)); 
   Serial.print(" id : "); Serial.print(sid); Serial.print(" pin : ");Serial.print(getSensorPinNumber(sid)); Serial.print(" frequency : ");  Serial.print(getSensorFrequency(sid)); Serial.println();
-  return true;
+  return RETURN_OK;
 }
 
 
@@ -312,46 +315,65 @@ boolean sensorinfoCommand(String name)
  *
  * return : true if good execution, false if not.
  */
-boolean timeStampCommand()
+String execCommandTimeStamp()
 {
   int time = boardTime();
   if (time < 0)
-    return false;
+    return RETURN_TIMEERROR;
   Serial.print("R: Arduino time : "); Serial.print(time); Serial.println(" ms.");
-  return true;
+  return RETURN_OK;
 }
 
 
 /**
- * Change the status of a sensor.
+ * Suspend a sensor.
+ *
+ * sname    : Sensor name.
+ */
+String execCommandSuspend(String sname)
+{
+  if (changeSensorStatus(sname, 0))
+    return RETURN_OK;
+  return RETURN_INVALIDPARAM;
+}
+
+
+/**
+ * Resume a sensor.
  *
  * sname    : Sensor name.
  * sstatuts : New sensor status.
  */
-boolean changeStatus(String sname, int sstatus)
+String execCommandResume(String sname)
 {
-  return changeSensorStatus(sname, sstatus);  
+  if (changeSensorStatus(sname, 1))
+    return RETURN_OK;
+  return RETURN_INVALIDPARAM;
 }
+
 
 
 /**
  * Clear the sensors table.
  *
- * return : None.
+ * return : The command response.
  */
-void resetSensorsCommand()
+String execCommandResetSensors()
 {
   clearTable();
+  return RETURN_OK;
 }
 
 
 /**
  * Get Arduino board ID
  *
+ * return : The command response.
  */
-void printBoardId()
+String execCommandBoardId()
 {
   Serial.println("R: " + getId());
+  return RETURN_OK;
 }
 
  

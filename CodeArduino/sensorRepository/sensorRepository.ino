@@ -171,7 +171,9 @@ unsigned long getNextUpdateTime(int sid)
 /**
  * Get a sensor index from its name.
  *
- * sensorName : Sensor index in sensor tab, -1 if sensor not found.
+ * sensorName : Name of the sensor. 
+ *
+ * return : Sensor index in sensor tab, -1 if sensor not found.
  */
 int getSensorByName (String sensorName) 
 {
@@ -186,6 +188,30 @@ int getSensorByName (String sensorName)
     if (sensorTab[i] == NULL)
       continue;
     if (sensorName.equals(sensorTab[i]->name))
+      return i;
+  }
+  
+  // Nothing find.
+  return -1;
+}
+
+
+/**
+ * Get a sensor index from its pin number.
+ *
+ * pNum : Sensor pin number.
+ *
+ * return : Sensor index in sensor tab, -1 if sensor not found.
+ */
+int getSensorByPinNumber (int pNum) 
+{   
+  // Search for a sensor who have the same name as sensorName. 
+  int i;
+  for (i = 0 ; i < MAX_SENSORS; i++)
+  {
+    if (sensorTab[i] == NULL)
+      continue;
+    if (pNum == sensorTab[i]->pin)
       return i;
   }
   
