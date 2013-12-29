@@ -82,7 +82,7 @@ Pour ajouter de nouvelles commandes utilisables par la plate-forme, il faut se r
 3. se rendre dans la fonction &lt;String execCommand(String cmd)>, 
 4. se rendre au commentaire "// Check command to execute" et se rendre à la dernière condition "else if ....", 
 5. ajouter une nouvelle condition "else if" en dessous de l'actuelle dernière, au format suivant : &lt;else if (command.equals("NOUVELLECOMMANDE"))>,
-6. scroller en bas du programme et écrire une nouvelle fonction, qui contiendra la commande, au format suivant : &lt;boolean macommandeCommand>() et ajouter le code nécessaire au fonctionnement de la commande. La fonction doit retourner un booleen, pour savoir si la commande a bien été exécutée ou non. 
+6. scroller en bas du programme et écrire une nouvelle fonction, qui contiendra la commande, au format suivant : &lt;String execCommandMaCommande>() et ajouter le code nécessaire au fonctionnement de la commande. La fonction doit retourner un booleen, pour savoir si la commande a bien été exécutée ou non. 
 7. Pour récupérer les String dans l'entrée série, utiliser la fonction &lt;nextToken>. Pour récupérer une valeur entière, utiliser la fonction &lt;nextTokenInt()>. 
 8. Enfin, à l'endroit où se situe le code &lt;else if (command.equals("NOUVELLECOMMANDE"))>, ajouter les tests nécessaires à l'éxécution de la commande. 
 9. Si cela est nécessaire, se rendre dans la tab de code correspondante pour créer une nouvelle fonction, à appeler pour l'exécution de la commande (voir exemple dans la fonction &lt;addCommand> où la fonction &lt;addSensor est appellée).
