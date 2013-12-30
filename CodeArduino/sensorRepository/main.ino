@@ -34,8 +34,8 @@ void loop()
     }
     
     // Execute the command.
-    // Serial.print("Received command : "); Serial.println(content);
-    Serial.println(execCommand(content));
+    String resp = execCommand(content);
+    Serial.print("R: "); Serial.println(resp);
   }
   
   // Update sensors data.
