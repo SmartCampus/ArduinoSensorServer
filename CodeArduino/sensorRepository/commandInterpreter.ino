@@ -11,6 +11,7 @@ const String RETURN_UKNOWNCMD    = "2 Uknown command.";
 const String RETURN_NAMEUSED     = "3 Name already in use.";
 const String RETURN_PINUSED      = "4 Pin already in use.";
 const String RETURN_TIMEERROR    = "5 Time not available for this sensor.";
+const String RETURN_INVALIDFREQ  = "6 The given frequency is inferior to 0.";
 
 
 /**
@@ -235,6 +236,8 @@ String execCommandFreq()
     
   // Get the new frequency.
   int newFrequency = nextTokenInt();
+  if (newFrequency < 0)
+    return RETURN_INVALIDFREQ;
   
   // Change the data refresh rate. 
   changeDataFrequencyByName(sname, newFrequency); 
@@ -276,7 +279,7 @@ String execCommandSensorInfo(String name)
     return RETURN_INVALIDPARAM;
   
   // Print sensor informations.
-  return "0 Name: " + getSensorName(sid) + " id: " + sid + " pin: " + getSensorPinNumber(sid) + " frequency: " + getSensorFrequency(sid);
+  return "0 Name:" + getSensorName(sid) + " pin:" + getSensorPinNumber(sid) + " frequency:" + getSensorFrequency(sid);
 }
 
 
