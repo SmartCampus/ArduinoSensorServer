@@ -21,8 +21,8 @@ Les commandes actuellement disponibles, ainsi que leur syntaxe, sont les suivant
 * __del__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName> 
 * __freq__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName> &lt;newFrequency>
 * __sensorinfo__ &lt;sensorName>
-* __sleep__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName>
-* __wakeup__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName>
+* __suspend__ &nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName>
+* __resume__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName>
 * __listsensors__
 * __timestamp__
 * __resetsensors__
