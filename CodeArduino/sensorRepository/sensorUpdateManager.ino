@@ -27,8 +27,9 @@ void refreshSensorData(int sid)
    float value = 0;
    value = analogRead(getSensorPinNumber(sid));
    delay(100);
+   
    // Print the data. JSON Format
-   printDataJson(getSensorName(sid),value,millis());  
+   printDataJson(getSensorName(sid), value, millis());  
 }
 
 /**
@@ -38,15 +39,16 @@ void refreshSensorData(int sid)
 * sensorValue : Sensor's value
 * timestamp   : Time
 */
-void printDataJson(String sensorName, int sensorValue, unsigned long timestamp){
+void printDataJson(char* sensorName, int sensorValue, unsigned long timestamp)
+{
    // Start JSON
    Serial.print("D: {");
    // Display sensor's name
-   Serial.print("\"n\":\"");Serial.print(sensorName);Serial.print("\",");
+   Serial.print("n:"); Serial.print(sensorName); Serial.print(",");
    // Display value
-   Serial.print("\"v\":");Serial.print(sensorValue);Serial.print(",");
+   Serial.print("v:"); Serial.print(sensorValue); Serial.print(",");
    // Display timestamp
-   Serial.print("\"t\":");Serial.print(timestamp);
+   Serial.print("t:"); Serial.print(timestamp);
    // Close JSON
    Serial.println("}");
 }

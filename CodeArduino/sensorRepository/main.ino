@@ -1,54 +1,75 @@
-#define BOARD_ID "42";
+#define MAX_LOOP_DELAY 1000
 
-/** Check if the setup is done or not */
-boolean initDone = false;
+/** Command buffer */
+char* command;
 
+/** Command response buffer */
+char* result;
 
 void setup()
 {
-  Serial.begin(9600);
-  clearTable(); // Clear sensors table. 
-  Serial.println("I: Tab cleared.");
+  command = (char*)malloc(100);
+  result = (char*)malloc(200);
   
-  if (!initDone)
-  {
-    Serial.println("I: Arduino setup finished.");
-    initDone = true;
-  } 
+  Serial.begin(9600);
+  // clearTable(); // Clear sensors table. 
+  Serial.println("I: Tab cleared.");
+  Serial.println("I: Setup terminated");
 }
 
 
 void loop()
-{  
-   // Character read by the serial. v
-  char character;
+{      
+  // Adaptative loop delay.
+  int loopDelay = MAX_LOOP_DELAY;
   
   // Check if something to read.
   if (Serial.available())
   {  
-    String content = ""; // Command to build.
-    while (Serial.available() > 0)
+    int cnx = 0;
+    while (Serial.available())
     {
-      character = Serial.read();
-      content.concat(character);
+      int c = Serial.read();
+      if (c == '\n')
+        break;
+      command[cnx++] = c;
     }
+    command[cnx] = 0;
+    
+    // Serial.print("I: Command size received : "); Serial.println(cnx); 
     
     // Execute the command.
-    String resp = execCommand(content);
-    Serial.print("R: "); Serial.println(resp);
+    result[0] = 0;
+    int resp = execCommand(command, result);
+    
+    Serial.print("R: "); 
+    Serial.print(resp);
+    Serial.print(" ");
+    if (result[0] != 0)
+    {
+      Serial.print(result);
+    }
+    else
+    {
+      /*if ((resp >= 0) && (resp < NB_RETURN_CODE))
+        Serial.print(RETURN_CODE_STRINGS[resp]);*/
+    }
+    Serial.println();
+    
+    // Set shorter delay to quickly process next command.
+    loopDelay = 10;
+  }
+  else
+  {
+    if (loopDelay < MAX_LOOP_DELAY)
+    {
+      loopDelay += 10;
+      if (loopDelay > MAX_LOOP_DELAY)
+        loopDelay = MAX_LOOP_DELAY;
+    }
   }
   
   // Update sensors data.
   queryAllSensors();
-  delay(1000);
-}
-
-
-/**
- * Get Board Unique ID (BUID)
- *
- * return Board ID
- */
-String getId(){
-    return BOARD_ID; 
+  delay(loopDelay);
 }

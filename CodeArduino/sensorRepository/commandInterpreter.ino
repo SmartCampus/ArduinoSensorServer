@@ -1,17 +1,34 @@
+/** Return messages */
+#define RETURN_OK            0
+#define RETURN_INVALIDPARAMS 1
+#define RETURN_UKNOWNCMD     2
+#define RETURN_NAMEUSED      3
+#define RETURN_PINUSED       4
+#define RETURN_TIMEERROR     5
+#define RETURN_INVALIDFREQ   6
+#define NB_RETURN_CODE       7
+
 /** Command to be processed */
-String theCommand; 
+char* theCommand; 
 
 /** Actual read index */
 int readIndex; 
 
+/** Last read token */
+char lastToken[TOKEN_SIZE];
+
+
 /** Return messages */
-const String RETURN_OK           = "0 Command OK.";
-const String RETURN_INVALIDPARAM = "1 Invalid parmeters.";
-const String RETURN_UKNOWNCMD    = "2 Uknown command.";
-const String RETURN_NAMEUSED     = "3 Name already in use.";
-const String RETURN_PINUSED      = "4 Pin already in use.";
-const String RETURN_TIMEERROR    = "5 Time not available for this sensor.";
-const String RETURN_INVALIDFREQ  = "6 The given frequency is inferior to 0.";
+const char* RETURN_CODE_STRINGS[NB_RETURN_CODE] =
+{
+  "Command OK",
+  "Invalid parmeters",
+  "Uknown command",
+  "Name already in use",
+  "Pin already in use",
+  "Time not available for this sensor",
+  "The given frequency is inferior to 0"
+};
 
 
 /**
@@ -21,140 +38,120 @@ const String RETURN_INVALIDFREQ  = "6 The given frequency is inferior to 0.";
  *  
  * return : The command execution response.
  */
-String execCommand(String cmd)
-{
-  // Check if no command.
-  if (cmd == NULL)
-    return RETURN_UKNOWNCMD;
-    
+int execCommand(char* cmd, char* result)
+{    
   // Store command to process.
   theCommand = cmd;
-  theCommand.trim();
   readIndex = 0;
   
+  Serial.print("I: Command to execute : "); Serial.println(cmd);
   // Get command name. 
-  String commandName = nextToken();
-  if (commandName == NULL)
+  if (nextToken())
     return RETURN_UKNOWNCMD;
-  
+    
+  Serial.print("I: Command name : "); Serial.println(lastToken);
   // Check command to execute. 
-  if (commandName.equals("add"))
-  {
-    return execCommandAdd();
-  }
+  if (!strcmp(lastToken, "add"))
+    return execCommandAdd(result);
   
-  else if (commandName.equals("del"))
-  {
-    return execCommandDel();
-  }
+  if (!strcmp(lastToken, "del"))
+    return execCommandDel(result);
   
-  else if (commandName.equals("freq"))
-  {
-     return execCommandFreq();
-  }
-  
-  else if (commandName.equals("listsensors"))
-  {
-     return execCommandListSensors();
-  }
-  
-  else if (commandName.equals("sensorinfo"))
-  {
-    // Get sensor name.
-    String sname = nextToken();
+  if (!strcmp(lastToken, "freq"))
+     return execCommandFreq(result);
     
-    return execCommandSensorInfo(sname);
-  }
+  if (!strcmp(lastToken, "listsensors"))
+     return execCommandListSensors(result);
   
-  else if (commandName.equals("resetsensors"))
-  {
-    return execCommandResetSensors();
-  }
+  if (!strcmp(lastToken, "sensorinfo"))    
+    return execCommandSensorInfo(result);
   
-  else if (commandName.equals("timestamp"))
-  {
-    return execCommandTimeStamp();      
-  }
+  if (!strcmp(lastToken, "resetsensors"))
+    return execCommandResetSensors(result);
   
-  else if (commandName.equals("boardid"))
-  {
-    return execCommandBoardId();
-  }
+  if (!strcmp(lastToken, "timestamp"))
+    return execCommandTimeStamp(result);      
   
-  else if (commandName.equals("suspend"))
-  {
-    // Get sensor name.
-    String sname = nextToken();
-    
-    return execCommandSuspend(sname);
-  }
+  if (!strcmp(lastToken, "boardid"))
+    return execCommandBoardId(result);
   
-  else if (commandName.equals("resume"))
-  {
-    // Get sensor name.
-    String sname = nextToken();
-    
-    return execCommandResume(sname);
-  }
+  if (!strcmp(lastToken, "suspend"))  
+    return execCommandSuspend(result);
   
-  else 
-  {
-    return RETURN_UKNOWNCMD; 
-  }
+  if (!strcmp(lastToken, "resume"))
+    return execCommandResume(result);
+  
+  // Unknown command.
+  return RETURN_UKNOWNCMD; 
 }
 
 
 /**
  * Get the next token in the command.
  *
- * return : The next token in the command, null if no more token.
+ * return : 0 if token has been read, 1 if end of input.
  */
-String nextToken()
+int nextToken()
 {
   // Skip all blanks.
-  int slen = theCommand.length();
-  while ((readIndex < slen) && (theCommand.charAt(readIndex) == ' '))
+  while ((theCommand[readIndex] != 0) && (theCommand[readIndex] <= ' '))
     readIndex++;
   
   // Check if no more tokens.
-  if (readIndex >= slen)
-    return NULL;
+  if (theCommand[readIndex] == 0)
+    return 1;
   
   // Search the end of token.
-  int endTok = theCommand.indexOf(' ', readIndex);
-  if (endTok < 0) 
-  {
-    endTok = theCommand.length();
-  }
+  int endTok = readIndex + 1;
+  while ((theCommand[endTok] != 0) && (theCommand[endTok] > ' '))
+    endTok++;
   
   // Build result.
-  String result = theCommand.substring(readIndex, endTok);
+  strncpy(lastToken, theCommand + readIndex, endTok - readIndex);
+  lastToken[endTok - readIndex] = 0;
   readIndex = endTok;
-  return result;  
+  return 0;
 }
 
 
 /**
- * Get the next token as positive integer. 
+ * Get the next token as integer. 
  *
- * return : Token value as integer, -1 if none.
+ * res : Result int.
+ *
+ * return : 0 if token has been read, 1 if end of input.
  */ 
-int nextTokenInt()
+int nextTokenInt(int *res)
 {
    // Check if no more token.
-   String stock = nextToken();
-   if (stock == NULL) 
-     return -1; 
+   if (nextToken())
+     return 1; 
    
    // Check if first token is an integer.
-   char c = stock.charAt(0);
-   if ((c < '0') || (c > '9')) 
-     return -1;
+   char c = lastToken[0];
+   if (((c < '0') || (c > '9')) && (c != '-')) 
+     return 1;
      
    // Build result.
-   return (int)stock.toInt();
+   *res = atoi(lastToken);
+   return 0;
 }
 
+
+/**
+ * Get the next string token.
+ *
+ * str : Result string (of size at least TOKEN_SIZE).
+ *
+ * return : 0 if token has been read, 1 if end of input.
+ */
+int nextTokenString(char* str)
+{
+   if (nextToken())
+     return 1;
+   strncpy(str, lastToken, TOKEN_SIZE);
+   return 0;
+}
 
 /*******************************************************************************************
  * Commands list.
@@ -165,54 +162,64 @@ int nextTokenInt()
 /**
  * Add a sensor to the Arduino platform.
  *
- * return : true if good command execution, false if not.
+ * result : Result buffer to fill.
+ *
+ * return : exec return code.
  */
-String execCommandAdd()
+int execCommandAdd(char* result)
 {
    // Get sensor name.
-    String sname = nextToken();
+   char name[TOKEN_SIZE];
+   if (nextTokenString(name))
+     return RETURN_INVALIDPARAMS;
+     
+   // Get pin number.
+   int pinNumber;
+   if (nextTokenInt(&pinNumber))
+     return RETURN_INVALIDPARAMS;
     
-    // Get pin number.
-    int pinNumber = nextTokenInt();
+   // Get refresh data frequency. 
+   int frequency;
+   if (nextTokenInt(&frequency))
+     return RETURN_INVALIDPARAMS;
+     
+   // Check parameters. 
+   if ((pinNumber < 0) || (frequency < 0))
+     return RETURN_INVALIDPARAMS;
     
-    // Get refresh data frequency. 
-    int frequency = nextTokenInt();
-    
-    // Check parameters. 
-    if ((sname == NULL) || (pinNumber < 0) || (frequency < 0))
-      return RETURN_INVALIDPARAM;
-    
-    // Check if name or pin number are already in use.
-    if (getSensorByName(sname) >= 0)
-      return RETURN_NAMEUSED;
-    if (getSensorByPinNumber(pinNumber) >= 0)
-      return RETURN_PINUSED;        
+   // Check if name or pin number are already in use.
+   if (getSensorByName(name) >= 0)
+     return RETURN_NAMEUSED;
+   if (getSensorByPinNumber(pinNumber) >= 0)
+     return RETURN_PINUSED;       
 
-    // Add the new sensor and return.
-    addSensor(sname, pinNumber, frequency, true);
-    return RETURN_OK;
+   // Add the new sensor and return.
+   addSensor(name, pinNumber, frequency, true);
+   return RETURN_OK;
 }
 
 
 /**
  * Delete a sensor from an Arduino platform.
  *
- * return : true if good execution, false if not.
+ * result : Result buffer to fill.
+ *
+ * return : exec return code.
  */
-String execCommandDel()
+int execCommandDel(char* result)
 {
   // Get sensor name.
-  String sname = nextToken();
+   char name[TOKEN_SIZE];
+   if (nextTokenString(name))
+     return RETURN_INVALIDPARAMS;
   
   // Get sensor index and check if sensor exists.
-  int sid = getSensorByName(sname);
-  
-  // Check parameters. 
-  if ((sname == NULL) || (sid < 0))
-    return RETURN_INVALIDPARAM;
+  int sid = getSensorByName(name);
+  if (sid < 0)
+    return RETURN_INVALIDPARAMS;
   
   // Delete the sensor (by name).
-  deleteByName(sname); 
+  deleteById(sid);
   return RETURN_OK;
 }
 
@@ -220,27 +227,31 @@ String execCommandDel()
 /**
  * Change data frequency of an existing sensor. 
  *
- * return : true if good execution, false if not.
+ * result : Result buffer to fill.
+ *
+ * return : exec return code.
  */
-String execCommandFreq()
+int execCommandFreq(char* result)
 {
-  // Get the pin number. 
-  String sname = nextToken();
+  // Get sensor name.
+   char name[TOKEN_SIZE];
+   if (nextTokenString(name))
+     return RETURN_INVALIDPARAMS;
   
   // Get sensor index and check if sensor exists.
-  int sid = getSensorByName(sname);
+  int sid = getSensorByName(name);
   
   // Check parameters. 
-  if ((sname == NULL) || (sid < 0))
-    return RETURN_INVALIDPARAM;
+  if (sid < 0)
+    return RETURN_INVALIDPARAMS;
     
   // Get the new frequency.
-  int newFrequency = nextTokenInt();
-  if (newFrequency < 0)
-    return RETURN_INVALIDFREQ;
+  int newFrequency;
+  if (nextTokenInt(&newFrequency))
+     return RETURN_INVALIDPARAMS;
   
   // Change the data refresh rate. 
-  changeDataFrequencyByName(sname, newFrequency); 
+  changeDataFrequencyByName(name, newFrequency); 
   return RETURN_OK;
 }
 
@@ -248,86 +259,116 @@ String execCommandFreq()
 /**
  * List all the sensors of the Arduino Board.
  *
- * return : true if good execution, false if not.
+ * result : Result buffer to fill.
+ *
+ * return : exec return code.
  */
-String execCommandListSensors()
+int execCommandListSensors(char* result)
 {
   int sid = 0; 
     
   // Print all sensors name.
-  String resp = "0";
+  result[0] = 0;
+  strcat(result, " ");
   while((sid = getNextAvailableSensor(sid)) >= 0)
   {
-    resp += " " + getSensorName(sid);  
+    strcat(result, getSensorName(sid));  
+    strcat(result, " ");
     sid++;
   }
   
-  return resp;
+  return RETURN_OK;
 }
 
 
 /** 
  * Get sensor informations from a sensor name.
  *
- * return : true if good execution, false if not.
+ * result : Result buffer to fill.
+ *
+ * return : exec return code.
  */
-String execCommandSensorInfo(String name)
+int execCommandSensorInfo(char* result)
 {
+  // Get sensor name.
+   char name[TOKEN_SIZE];
+   if (nextTokenString(name))
+     return RETURN_INVALIDPARAMS;
+  
   // Get sensor ID.
   int sid = getSensorByName(name);
+  //Serial.print("Name: '"); Serial.print(name); Serial.print("' Sid:");Serial.println(sid);Serial.flush();
   if (sid < 0)
-    return RETURN_INVALIDPARAM;
+    return RETURN_INVALIDPARAMS;
   
   // Print sensor informations.
-  return "0 Name:" + getSensorName(sid) + " pin:" + getSensorPinNumber(sid) + " frequency:" + getSensorFrequency(sid);
+  sprintf(result, "Name:%s pin:%d frequency:%d", getSensorName(sid), getSensorPinNumber(sid), getSensorFrequency(sid));
+  return RETURN_OK;
 }
 
 
 /**
  * Get Arduino board current time. 
  *
- * return : true if good execution, false if not.
+ * result : Result buffer to fill.
+ *
+ * return : exec return code.
  */
-String execCommandTimeStamp()
+int execCommandTimeStamp(char* result)
 {
-  return "0 Time: " + boardTime();
+  sprintf(result, "Time:%ld", millis());
+  return RETURN_OK;
 }
 
 
 /**
  * Suspend a sensor.
  *
- * sname    : Sensor name.
+ * result : Result buffer to fill.
+ *
+ * return : exec return code.
  */
-String execCommandSuspend(String sname)
+int execCommandSuspend(char* result)
 {
-  if (changeSensorStatus(sname, 0))
+  // Get sensor name.
+   char name[TOKEN_SIZE];
+   if (nextTokenString(name))
+     return RETURN_INVALIDPARAMS;
+  
+  if (changeSensorStatus(name, 0))
     return RETURN_OK;
-  return RETURN_INVALIDPARAM;
+  return RETURN_INVALIDPARAMS;
 }
 
 
 /**
  * Resume a sensor.
  *
- * sname    : Sensor name.
- * sstatuts : New sensor status.
+ * result : Result buffer to fill.
+ *
+ * return : exec return code.
  */
-String execCommandResume(String sname)
+int execCommandResume(char* result)
 {
-  if (changeSensorStatus(sname, 1))
+  // Get sensor name.
+   char name[TOKEN_SIZE];
+   if (nextTokenString(name))
+     return RETURN_INVALIDPARAMS;
+  
+  if (changeSensorStatus(name, 1))
     return RETURN_OK;
-  return RETURN_INVALIDPARAM;
+  return RETURN_INVALIDPARAMS;
 }
-
 
 
 /**
  * Clear the sensors table.
  *
- * return : The command response.
+ * result : Result buffer to fill.
+ *
+ * return : exec return code.
  */
-String execCommandResetSensors()
+int execCommandResetSensors(char* result)
 {
   clearTable();
   return RETURN_OK;
@@ -337,11 +378,12 @@ String execCommandResetSensors()
 /**
  * Get Arduino board ID
  *
- * return : The command response.
+ * result : Result buffer to fill.
+ *
+ * return : exec return code.
  */
-String execCommandBoardId()
+int execCommandBoardId(char* result)
 {
-  return "0 " + getId();
+  sprintf(result, "%s", BOARD_ID);
+  return RETURN_OK;
 }
-
- 
