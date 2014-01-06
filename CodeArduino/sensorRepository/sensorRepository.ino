@@ -62,6 +62,7 @@ int addSensor(char* name, int pinNumber, int frequency, boolean isOutput)
   sensorTab[i].refreshDataFrequency = frequency * 1000;
   sensorTab[i].nextUpdateTime = millis();
   sensorTab[i].isUsed = true;
+  sensorTab[i].isEnabled = 1;
   //Serial.print("Add a new sensor:"); Serial.print(i); Serial.print(" name: '"); Serial.print(sensorTab[i].name); Serial.println("'");
   return i;
 }

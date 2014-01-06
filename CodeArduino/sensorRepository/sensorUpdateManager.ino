@@ -6,7 +6,7 @@
  */
 void queryAllSensors()
 {
-  int sid; 
+  int sid;
   while ((sid = getNextSensorToQuery()) >= 0)
   {
     refreshSensorData(sid);
