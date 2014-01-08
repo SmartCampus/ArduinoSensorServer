@@ -44,12 +44,19 @@ int execCommand(char* cmd, char* result)
   theCommand = cmd;
   readIndex = 0;
   
-  Serial.print("I: Command to execute : "); Serial.println(cmd);
+  //Serial.print("I: Command to execute : "); Serial.println(cmd);
+  
   // Get command name. 
   if (nextToken())
     return RETURN_UKNOWNCMD;
     
-  Serial.print("I: Command name : "); Serial.println(lastToken);
+  //Serial.print("I: Command name : "); Serial.println(lastToken);
+  
+/*******************************************************************************************
+ * Commands execution.
+ * You can add command at the end of this section.
+ *******************************************************************************************/
+  
   // Check command to execute. 
   if (!strcmp(lastToken, "add"))
     return execCommandAdd(result);
@@ -129,7 +136,7 @@ int nextTokenInt(int *res)
    
    // Check if first token is an integer.
    char c = lastToken[0];
-   if (((c < '0') || (c > '9')) && (c != '-')) 
+   if (((c < '0') || (c > '9')) && (c != '-'))
      return 1;
      
    // Build result.
@@ -212,6 +219,7 @@ int execCommandDel(char* result)
    char name[TOKEN_SIZE];
    if (nextTokenString(name))
      return RETURN_INVALIDPARAMS;
+  Serial.print("I:|Command interpreter| Name:"); Serial.println(name);
   
   // Get sensor index and check if sensor exists.
   int sid = getSensorByName(name);
@@ -370,7 +378,9 @@ int execCommandResume(char* result)
  */
 int execCommandResetSensors(char* result)
 {
+  //Serial.println("Passing in resetsensors command");
   clearTable();
+  Serial.println("I:|Command interpreter| Reset sensors OK");
   return RETURN_OK;
 }
 

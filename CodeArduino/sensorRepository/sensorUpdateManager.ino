@@ -29,7 +29,7 @@ void refreshSensorData(int sid)
    delay(100);
    
    // Print the data. JSON Format
-   printDataJson(getSensorName(sid), value, millis());  
+   // printDataJson(getSensorName(sid), value, millis());  
 }
 
 /**

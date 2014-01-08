@@ -316,11 +316,17 @@ boolean isSensorExists(int sid)
  */
 void clearTable()
 {
+  Serial.println("I:|sensorRepository| entering in clearTable()");
   int i;
   for (i = 0; i < MAX_SENSORS; i++)
   {
-    sensorTab[i].isUsed = false;
+    if (sensorTab[i].isUsed)
+    {
+      sensorTab[i].isUsed = false;
+      Serial.print("I:|sensorRepository| Sensor "); Serial.print(i); Serial.println(" deleted");
+    }
   }
+  Serial.println("I:|sensorRepository| getting out of clearTable()");
 }
 
 
