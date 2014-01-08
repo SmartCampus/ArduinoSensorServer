@@ -1,4 +1,5 @@
 #define MAX_LOOP_DELAY 1000
+#define SETUP_TERMINATED "I: Setup terminated\n\r"
 
 /** Command buffer */
 char command[100];
@@ -13,7 +14,7 @@ void setup()
   
   Serial.begin(9600);
   Serial.flush();
-  Serial.print("I: Setup terminated\n"); 
+  Serial.print(SETUP_TERMINATED); 
   Serial.flush();
 }
 
