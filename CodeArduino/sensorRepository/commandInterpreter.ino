@@ -219,7 +219,7 @@ int execCommandDel(char* result)
    char name[TOKEN_SIZE];
    if (nextTokenString(name))
      return RETURN_INVALIDPARAMS;
-  Serial.print("I:|Command interpreter| Name:"); Serial.println(name);
+  //Serial.print("I:|Command interpreter| Name:"); Serial.println(name);
   
   // Get sensor index and check if sensor exists.
   int sid = getSensorByName(name);
@@ -380,7 +380,7 @@ int execCommandResetSensors(char* result)
 {
   //Serial.println("Passing in resetsensors command");
   clearTable();
-  Serial.println("I:|Command interpreter| Reset sensors OK");
+  //Serial.println("I:|Command interpreter| Reset sensors OK");
   return RETURN_OK;
 }
 

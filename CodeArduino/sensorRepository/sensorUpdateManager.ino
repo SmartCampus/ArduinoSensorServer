@@ -29,7 +29,7 @@ void refreshSensorData(int sid)
    delay(100);
    
    // Print the data. JSON Format
-   // printDataJson(getSensorName(sid), value, millis());  
+   printDataJson(getSensorName(sid), value, millis());  
 }
 
 /**
@@ -50,7 +50,9 @@ void printDataJson(char* sensorName, int sensorValue, unsigned long timestamp)
    // Display timestamp
    Serial.print("t:"); Serial.print(timestamp);
    // Close JSON
-   Serial.println("}");
+   Serial.print("}"); 
+   Serial.print("\n");
+   Serial.flush();
 }
 
 
