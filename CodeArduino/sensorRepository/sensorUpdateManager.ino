@@ -6,8 +6,8 @@
  */
 void queryAllSensors()
 {
-  int sid;
-  while ((sid = getNextSensorToQuery()) >= 0)
+  int sid = 0;
+  while ((sid = getNextSensorToQuery(sid)) >= 0)
   {
     refreshSensorData(sid);
     updateNextSensorTime(sid);
@@ -26,7 +26,7 @@ void refreshSensorData(int sid)
    // Get the data from the analog port.
    float value = 0;
    value = analogRead(getSensorPinNumber(sid));
-   delay(100);
+   // delay(100);
    
    // Print the data. JSON Format
    printDataJson(getSensorName(sid), value, millis());  

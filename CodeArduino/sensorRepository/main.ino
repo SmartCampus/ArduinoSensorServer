@@ -18,9 +18,6 @@ char result[RESPONSE_BUFFER_LENGTH];
 
 void setup()
 {
-  /*command = (char*)malloc(100);
-  result = (char*)malloc(200);*/
-  
   Serial.begin(115200);
   Serial.flush();
   Serial.print(SETUP_TERMINATED); 
@@ -85,5 +82,8 @@ void loop()
   
   // Update sensors data.
   queryAllSensors();
-  delay(loopDelay);
+  int ndelay = computeNextUpdateDelay();
+  if (ndelay > loopDelay)
+    ndelay = loopDelay;
+  delay(ndelay);
 }

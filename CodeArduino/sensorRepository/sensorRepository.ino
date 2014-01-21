@@ -223,13 +223,15 @@ int getSensorByPinNumber (int pNum)
  * Search in the array the next sensor which its hour 
  * overwhelm the nextUpdateTime. 
  *
+ * snx    : Start search index.
+ *
  * return : The next sensor. 
  */
-int getNextSensorToQuery()
+int getNextSensorToQuery(int snx)
 {
   unsigned long time = millis();
   int i; 
-  for (i = 0; i < MAX_SENSORS; i++)
+  for (i = snx; i < MAX_SENSORS; i++)
   {
     if ((sensorTab[i].isUsed) && (sensorTab[i].nextUpdateTime <= time) && (sensorTab[i].isEnabled == 1))
       return i;
@@ -354,8 +356,44 @@ boolean updateNextSensorTime(int sid)
   // Check if sensor exists.
   if (!(isSensorExists(sid)))
     return false;
- 
+   
   // Build the new sensor refresh frequency.
-  sensorTab[sid].nextUpdateTime = millis() + sensorTab[sid].refreshDataFrequency;
+  sensorTab[sid].nextUpdateTime += sensorTab[sid].refreshDataFrequency;
+   
+  // Check if long delay was accumulate.
+  long t = millis();
+  if ((t - sensorTab[sid].nextUpdateTime) > (5 * sensorTab[sid].refreshDataFrequency))
+  {
+     sensorTab[sid].nextUpdateTime = t + sensorTab[sid].refreshDataFrequency; 
+  }
+  
   return true;
+}
+
+
+/**
+ * Compute the delay of the next sensor to update.
+ *
+ */
+int computeNextUpdateDelay()
+{
+  long ctime = millis();
+  long ntime = ctime + 10000;
+  int i;
+  
+  // Search the next sensor update time.
+  for (i = 0; i < MAX_SENSORS; i++)
+  {
+    if ((sensorTab[i].isUsed) && (sensorTab[i].isEnabled > 0))
+    {
+      if (sensorTab[i].nextUpdateTime < ntime)
+        ntime = sensorTab[i].nextUpdateTime;    
+    }
+  }
+
+  // Compute delay.
+  int sdelay = ntime - ctime;
+  if (sdelay < 0)
+    sdelay = 0;
+  return sdelay;   
 }
