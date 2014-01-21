@@ -26,6 +26,7 @@ Les commandes actuellement disponibles, ainsi que leur syntaxe, sont les suivant
 * __listsensors__
 * __timestamp__
 * __resetsensors__
+* __getBoardID__
 
 
 Principes généraux
@@ -67,8 +68,9 @@ Description des commandes
 * __timestamp :__ Affiche depuis combien de temps (en secondes) tourne le programme sur l'Arduino. 
 * __resetsensors :__ Efface toute la table contenant les capteurs de la plate-forme Arduino.
 * __boardid :__ Récupère le numéro de la plate forme Arduino.
-* __sleep :__ Endort le capteur choisi (stop l'envoie de ses données).
-* __wakeup :__ Réveille le capteur choisi, si il était endormi (relance l'envoie des données).
+* __suspend :__ Endort le capteur choisi (stop l'envoie de ses données).
+* __resume :__ Réveille le capteur choisi, si il était endormi (relance l'envoie des données).
+* __getBoardID :__ Récupère l'identifiant de chaque plateforme connectée.
 
 Attention, il n'est possible que de récupérer les données envoyées par des capteurs analogiques. Les capteurs digitaux ne sont pas pris en compte pour le moment.
 
