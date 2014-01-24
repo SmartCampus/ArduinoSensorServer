@@ -1,4 +1,4 @@
-#define MAX_SENSORS 10 //Maximum number of sensor on an Arduino platform
+#define MAX_SENSORS 10 // Maximum number of sensor on an Arduino platform
 #define TOKEN_SIZE 30  // Max token size.  
 #define BOARD_ID "42"  // Board ID.
 

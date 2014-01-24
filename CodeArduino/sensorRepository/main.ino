@@ -18,7 +18,7 @@ char result[RESPONSE_BUFFER_LENGTH];
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.flush();
   Serial.print(SETUP_TERMINATED); 
   Serial.flush();
@@ -36,37 +36,47 @@ void loop()
     //Serial.println("I:|Main loop| Read the input command ...");
     int cnx = 0;
     int c = 0;
-    while (((c = Serial.read()) != '\n') && (cnx < COMMAND_BUFFER_LENGTH - 1))
+    int nbEndInput = 0;
+    while (((c = Serial.read()) != '\n') && (c != '\r') && (cnx < COMMAND_BUFFER_LENGTH - 1))
     {
-      //Serial.print("I:|Main loop| "); Serial.println(c);
-      if (c < 0)
+      if (c <= 0)
+      {
+        // Check excessive number of consecutive end input.
+        nbEndInput++; 
+        if (nbEndInput >= 10)
+          break;
         delay(1);
-      if (c != '\r')
+      }
+      else
+      {
+        nbEndInput = 0;
         command[cnx++] = c;
+      }
     }
     command[cnx] = 0;
-    Serial.print("I:|Main loop| command received :"); Serial.println(command); Serial.flush();
-    
-    // Execute the command.
-    result[0] = 0;
-    int resp = execCommand(command, result);
-    
-    Serial.print("R: "); 
-    Serial.print(resp);
-    Serial.print(" ");
-    if (result[0] != 0)
+    if (cnx != 0)
     {
-      Serial.print(result);
-    }
-    else
-    {
+       Serial.println(command); Serial.flush();
+    
+       // Execute the command.
+       result[0] = 0;
+       int resp = execCommand(command, result);
+    
+       Serial.print("R: "); 
+       Serial.print(resp);
+       Serial.print(" ");
+       if (result[0] != 0)
+       {
+         Serial.print(result);
+       }
+       else
+       {
       /*if ((resp >= 0) && (resp < NB_RETURN_CODE))
         Serial.print(RETURN_CODE_STRINGS[resp]);*/
+       }
+       Serial.print("\n");
+       Serial.flush();
     }
-    Serial.print("\n");
-    Serial.flush();
-    //Serial.print("I:|Main loop| return code "); Serial.print(resp); Serial.println(" sent."); Serial.flush();
-    
     // Set shorter delay to quickly process next command.
     loopDelay = 10;
   }
