@@ -23,13 +23,26 @@ void queryAllSensors()
  */ 
 void refreshSensorData(int sid)
 {
-   // Get the data from the analog port.
-   float value = 0;
-   value = analogRead(getSensorPinNumber(sid));
-   // delay(100);
-   
-   // Print the data. JSON Format
-   printDataJson(getSensorName(sid), value, millis());  
+   /**
+    * Check the sensor type and get its data back.
+    */
+   int type = getSensorType(sid);
+   if (type == SONAR)
+   {
+     Ultrasonic * ultrasonic = (Ultrasonic*) sensorTab[sid].sensorSpecific;
+     ultrasonic->MeasureInCentimeters();
+     int value = (int) ultrasonic->RangeInCentimeters;
+     printDataJson(getSensorName(sid), value, millis());
+   }
+   else
+   {
+     // Get the data from the analog port.
+     float value = 0;
+     value = analogRead(getSensorPinNumber(sid));
+     
+     // Print the data. JSON Format
+     printDataJson(getSensorName(sid), value, millis());  
+   }
 }
 
 /**

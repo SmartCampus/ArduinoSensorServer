@@ -8,6 +8,7 @@
 #define RETURN_INVALIDFREQ   6
 #define NB_RETURN_CODE       7
 
+
 /** Command to be processed */
 char* theCommand; 
 
@@ -160,6 +161,20 @@ int nextTokenString(char* str)
    return 0;
 }
 
+
+/**
+ * Check if sensor type is allowed.
+ *
+ * type   : Type to check.
+ * 
+ * return : 1 if sensor type is allowed, 0 if not.
+ */
+int isTypeAllowed(int type)
+{
+  return ((type >= 0) && (type < NB_SENSOR_TYPE));
+}
+
+
 /*******************************************************************************************
  * Commands list.
  * You can add command at the end of this section.
@@ -190,6 +205,11 @@ int execCommandAdd(char* result)
    if (nextTokenInt(&frequency))
      return RETURN_INVALIDPARAMS;
      
+   // Get sensor type.
+   int type;
+   if (nextTokenInt(&type) || !isTypeAllowed(type))
+     return RETURN_INVALIDPARAMS;
+     
    // Check parameters. 
    if ((pinNumber < 0) || (frequency < 0))
      return RETURN_INVALIDPARAMS;
@@ -201,7 +221,7 @@ int execCommandAdd(char* result)
      return RETURN_PINUSED;       
 
    // Add the new sensor and return.
-   addSensor(name, pinNumber, frequency, true);
+   addSensor(name, pinNumber, frequency, type, true);
    return RETURN_OK;
 }
 
@@ -310,7 +330,7 @@ int execCommandSensorInfo(char* result)
     return RETURN_INVALIDPARAMS;
   
   // Print sensor informations.
-  sprintf(result, "Name:%s pin:%d frequency:%d", getSensorName(sid), getSensorPinNumber(sid), getSensorFrequency(sid));
+  sprintf(result, "Name:%s pin:%d frequency:%d type:%d", getSensorName(sid), getSensorPinNumber(sid), getSensorFrequency(sid), getSensorType(sid));
   return RETURN_OK;
 }
 

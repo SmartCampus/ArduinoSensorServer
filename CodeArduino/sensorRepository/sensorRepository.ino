@@ -1,7 +1,36 @@
+/*******************************************************************************************
+ * Extern sensors libraries.
+ * You can add new librairies for the sensors in this part.
+ *******************************************************************************************/
+
+#include "Ultrasonic.h"
+
+/*******************************************************************************************
+ *******************************************************************************************/
+
 #define MAX_SENSORS 10 // Maximum number of sensor on an Arduino platform
 #define TOKEN_SIZE 30  // Max token size.  
 #define BOARD_ID "42"  // Board ID.
 
+
+/*******************************************************************************************
+ * Sensor available types.
+ * Each time you add a new librairie, add also a new sensor type.
+ *******************************************************************************************/
+typedef enum 
+{
+  TEMPERATURE=0,
+  HUMIDITY=1,
+  LIGHT=2,
+  SONAR=3
+}
+SENSOR_TYPE;
+
+/** Total number of sensor type */
+#define NB_SENSOR_TYPE 4
+
+/*******************************************************************************************
+ *******************************************************************************************/
 
 /**
  * Descriptor of a sensor.
@@ -9,8 +38,10 @@
 typedef struct 
 {
     char name[TOKEN_SIZE];         // Sensor name.
+    SENSOR_TYPE type;              // Sensor type.
     int pin;                       // Arduino pin where the sensor is plugged.
     int refreshDataFrequency;      // Refresh data frequency.
+    void* sensorSpecific;          // Sensor specific data.
     unsigned long nextUpdateTime;  // Next update time of the sensor.
     int isEnabled;                 // Sensor status (0=disabled, 1=enabled)
     boolean isUsed;                // Descriptor used (true = used).
@@ -24,15 +55,17 @@ SENSOR_DESCRIPTOR sensorTab[MAX_SENSORS];
 
 /**
  * Add a sensor to an array of sensors.
+ * If you want to add a sensor which works with a specific librairy, refer to the last part of this function.
  *
  * name      : Sensor name.
  * pin       : Arduino pin where the sensor is plugged
  * frequency : Sensor data refresh frequency (in seconds).
+ * type      : Sensor type.
  * isOutput  : Sensor mode (OUTPUT if true, INPUT if false).
  *
  * return    : Sensor index int sensor tab or -1 if sensor tab is full, -2 if name is already in use, -3 if pin is overwhelm, -4 if pin is already in use.
  */
-int addSensor(char* name, int pinNumber, int frequency, boolean isOutput)
+int addSensor(char* name, int pinNumber, int frequency, int type, boolean isOutput)
 {
   // Check if name is already used.
   if (getSensorByName(name) >= 0)
@@ -53,12 +86,24 @@ int addSensor(char* name, int pinNumber, int frequency, boolean isOutput)
     
   // Fill new sensor descriptor.
   strncpy(sensorTab[i].name, name, TOKEN_SIZE);
+  sensorTab[i].type = (SENSOR_TYPE) type;
   sensorTab[i].pin = pinNumber;
   sensorTab[i].refreshDataFrequency = frequency * 1000;
   sensorTab[i].nextUpdateTime = millis();
   sensorTab[i].isUsed = true;
+  sensorTab[i].sensorSpecific = NULL;
   sensorTab[i].isEnabled = 1;
-  //Serial.print("Add a new sensor:"); Serial.print(i); Serial.print(" name: '"); Serial.print(sensorTab[i].name); Serial.println("'");
+  
+  /**
+   * For every specific sensor you want to add, check its type here 
+   * and fill the strcuture as following.
+   */
+  if (type == SONAR)
+  {
+    Ultrasonic ultrasonic(pinNumber);
+    sensorTab[i].sensorSpecific = &ultrasonic;  
+  }
+  
   return i;
 }
 
@@ -91,6 +136,12 @@ boolean deleteById(int sid)
   if (!isSensorExists(sid))
     return false;
   sensorTab[sid].isUsed = false;
+  
+  if (sensorTab[sid].type == SONAR)
+  {
+    free(sensorTab[sid].sensorSpecific);
+    sensorTab[sid].sensorSpecific = NULL;
+  }
   return true;  
 }
 
@@ -155,6 +206,23 @@ int getSensorFrequency(int sid)
     return -1;
     
   return sensorTab[sid].refreshDataFrequency;
+}
+
+
+/**
+ * Get the sensor type.
+ *
+ * sid    : Sensor ID to get the type.
+ *
+ * return : Sensor type, -1 if not existing.
+ */
+int getSensorType(int sid)
+{
+  // Check if sensor exists.
+  if (!(isSensorExists(sid)))
+    return -1;
+   
+  return sensorTab[sid].type;
 }
 
 
