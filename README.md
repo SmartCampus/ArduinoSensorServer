@@ -17,7 +17,7 @@ Liste des commandes disponibles
 
 Les commandes actuellement disponibles, ainsi que leur syntaxe, sont les suivantes : 
 
-* __add__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName> &lt;pinNumber> &lt;refreshDataFrequency>
+* __add__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName> &lt;pinNumber> &lt;refreshDataFrequency> &lt;sensorType>
 * __del__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName> 
 * __freq__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sensorName> &lt;newFrequency>
 * __sensorinfo__ &lt;sensorName>
@@ -54,6 +54,7 @@ Description des paramètres
 * __pinNumber :__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le numéro du pin où est branché le capteur.
 * __refreshDataFrequency :__ La fréquence d'envoi des données du capteur vers l'Arduino (en secondes).
 * __newFrequency :__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;La nouvelle fréquence d'envoi des données du capteur.
+* __sensorType :__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Il s'agit du type du capteur que l'on désire ajouter. 
 
 
 
