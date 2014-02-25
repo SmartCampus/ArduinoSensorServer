@@ -1,37 +1,25 @@
-/** Maximum number of sensor on an Arduino platform */
-#define MAX_SENSORS 20  
+#define MAX_SENSORS 10 // Maximum number of sensor on an Arduino platform
+#define TOKEN_SIZE 30  // Max token size.  
+#define BOARD_ID "TEST_BOARD_2"  // Board ID.
+
 
 /**
- * Define the comportement of a sensor.
- */ 
-class Sensor 
+ * Descriptor of a sensor.
+ */
+typedef struct 
 {
-  public :
-    String name;                   // Sensor name.
+    char name[TOKEN_SIZE];         // Sensor name.
     int pin;                       // Arduino pin where the sensor is plugged.
     int refreshDataFrequency;      // Refresh data frequency.
     unsigned long nextUpdateTime;  // Next update time of the sensor.
     int isEnabled;                 // Sensor status (0=disabled, 1=enabled)
-    
-    /**
-     * Normal constructor.
-     */  
-    public : Sensor(int dataF, int p, String n, boolean isOut)
-    {
-      refreshDataFrequency = dataF * 1000;
-      pin = p;
-      name = n;
-      //pinMode(pin, isOut);
-      nextUpdateTime = millis();
-      isEnabled = 1;
-    }  
-};
+    boolean isUsed;                // Descriptor used (true = used).
+}
+SENSOR_DESCRIPTOR;
+
 
 /** Tab of sensors */
-Sensor * sensorTab[MAX_SENSORS];
-
-/** Number of elements in sensorTab */
-int sensorNb = 0;
+SENSOR_DESCRIPTOR sensorTab[MAX_SENSORS];
 
 
 /**
@@ -44,36 +32,55 @@ int sensorNb = 0;
  *
  * return    : Sensor index int sensor tab or -1 if sensor tab is full, -2 if name is already in use, -3 if pin is overwhelm, -4 if pin is already in use.
  */
-int addSensor(String name, int pinNumber, int frequency, boolean isOutput)
+int addSensor(char* name, int pinNumber, int frequency, boolean isOutput)
 {
-  int i = 0;
-  
-  // Check if existing.
+  // Check if name is already used.
   if (getSensorByName(name) >= 0)
     return -2; 
     
-  // Check if pin number is not too high.
-  else if (pinNumber > MAX_SENSORS)
+  // Check pin number.
+  if ((pinNumber < 0) || (pinNumber >= MAX_SENSORS))
     return -3;
     
+  // Check if pin number already used.
+  if (getSensorByPinNumber(pinNumber) >= 0)
+    return -4;
+    
   // Search for a free place in sensor tab.
-  for (i; i < MAX_SENSORS; i++)
-  {
-    // Check if pin is already in use.
-    if (sensorTab[i]->pin == pinNumber)
-      return -4;
-    if (sensorTab[i] == NULL)
-    {
-      sensorTab[i] = new Sensor(frequency, pinNumber, name, isOutput);
-      return i;
-    }
-  }
-  return -1;
+  int i = getFreeSensorId();
+  if (i < 0)
+    return -1;
+    
+  // Fill new sensor descriptor.
+  strncpy(sensorTab[i].name, name, TOKEN_SIZE);
+  sensorTab[i].pin = pinNumber;
+  sensorTab[i].refreshDataFrequency = frequency * 1000;
+  sensorTab[i].nextUpdateTime = millis();
+  sensorTab[i].isUsed = true;
+  sensorTab[i].isEnabled = 1;
+  //Serial.print("Add a new sensor:"); Serial.print(i); Serial.print(" name: '"); Serial.print(sensorTab[i].name); Serial.println("'");
+  return i;
 }
 
 
 /**
- * Delete a sensor from an array of sensors and shut it. 
+ * Get a free sensor id.
+ *
+ * return : Index of a free sensor ID, -1 if none.
+ */
+int getFreeSensorId()
+{
+  int i;
+  for (i = 0; i < MAX_SENSORS; i++)
+  {
+    if (!(sensorTab[i].isUsed))
+      return i;  
+  }
+  return -1;
+}
+
+/**
+ * Delete a sensor from an array of sensors. 
  *
  * sid    : Sensor index in sensor tab.
  *
@@ -81,9 +88,9 @@ int addSensor(String name, int pinNumber, int frequency, boolean isOutput)
  */
 boolean deleteById(int sid)
 {
-  if (!isSensorExists(sid)) 
+  if (!isSensorExists(sid))
     return false;
-  sensorTab[sid] = NULL;
+  sensorTab[sid].isUsed = false;
   return true;  
 }
 
@@ -94,31 +101,31 @@ boolean deleteById(int sid)
  * sensoreName : Name of the sensor to delete.
  * return      : true if successful, false if not.
  */
-boolean deleteByName(String sensorName)
+boolean deleteByName(char* sensorName)
 {
   return deleteById(getSensorByName(sensorName));
 }
 
 
 /**
- * Get sensor name by the help of its index.
+ * Get sensor name from its index.
  *
  * sid    : Sensor index.
  * 
  * return : Sensor name.
  */
-String getSensorName(int sid)
+char* getSensorName(int sid)
 {
   // Check if sensor exists.
   if (!(isSensorExists(sid)))
-    return NULL;
+    return "";
    
-  return sensorTab[sid]->name;
+  return sensorTab[sid].name;
 }
 
 
 /**
- * Get sensor pin number by the help of its index.
+ * Get sensor pin number from its index.
  *
  * sid    : Sensor index.
  * 
@@ -130,12 +137,12 @@ int getSensorPinNumber(int sid)
   if (!(isSensorExists(sid)))
     return -1;
   
-  return sensorTab[sid]->pin;
+  return sensorTab[sid].pin;
 }
 
 
 /**
- * Get sensor frequency by the help of its index.
+ * Get sensor frequency from its index.
  *
  * sid    : Sensor index. 
  * 
@@ -147,12 +154,12 @@ int getSensorFrequency(int sid)
   if (!(isSensorExists(sid)))
     return -1;
     
-  return sensorTab[sid]->refreshDataFrequency;
+  return sensorTab[sid].refreshDataFrequency;
 }
 
 
 /**
- * Get sensor next update time by the help of its index.
+ * Get sensor next update time from its index.
  *
  * sid    : Sensor index.
  *
@@ -164,28 +171,46 @@ unsigned long getNextUpdateTime(int sid)
   if (!(isSensorExists(sid)))
     return -1;
     
-  return sensorTab[sid]->nextUpdateTime;
+  return sensorTab[sid].nextUpdateTime;
 }
 
 
 /**
  * Get a sensor index from its name.
  *
- * sensorName : Sensor index in sensor tab, -1 if sensor not found.
+ * sensorName : Name of the sensor. 
+ *
+ * return : Sensor index in sensor tab, -1 if sensor not found.
  */
-int getSensorByName (String sensorName) 
-{
-  // Check parameters.
-  if (sensorName == NULL) 
-    return -1;
-   
+int getSensorByName (char* sensorName) 
+{   
   // Search for a sensor who have the same name as sensorName. 
   int i;
   for (i = 0 ; i < MAX_SENSORS; i++)
   {
-    if (sensorTab[i] == NULL)
-      continue;
-    if (sensorName.equals(sensorTab[i]->name))
+    if (sensorTab[i].isUsed && (strcmp(sensorName, sensorTab[i].name) == 0))
+      return i;
+  }
+  
+  // Nothing find.
+  return -1;
+}
+
+
+/**
+ * Get a sensor index from its pin number.
+ *
+ * pNum : Sensor pin number.
+ *
+ * return : Sensor index in sensor tab, -1 if sensor not found.
+ */
+int getSensorByPinNumber (int pNum) 
+{   
+  // Search for a sensor who have the same name as sensorName. 
+  int i;
+  for (i = 0 ; i < MAX_SENSORS; i++)
+  {
+    if (sensorTab[i].isUsed && (pNum == sensorTab[i].pin))
       return i;
   }
   
@@ -198,15 +223,17 @@ int getSensorByName (String sensorName)
  * Search in the array the next sensor which its hour 
  * overwhelm the nextUpdateTime. 
  *
+ * snx    : Start search index.
+ *
  * return : The next sensor. 
  */
-int getNextSensorToQuery()
+int getNextSensorToQuery(int snx)
 {
   unsigned long time = millis();
   int i; 
-  for (i = 0; i < MAX_SENSORS; i++)
+  for (i = snx; i < MAX_SENSORS; i++)
   {
-    if ((sensorTab[i] != NULL) && (sensorTab[i]->nextUpdateTime <= time) && (sensorTab[i]->isEnabled == 1))
+    if ((sensorTab[i].isUsed) && (sensorTab[i].nextUpdateTime <= time) && (sensorTab[i].isEnabled == 1))
       return i;
   }
   
@@ -229,7 +256,7 @@ int getNextAvailableSensor(int firstId)
   // Get the next available sensor.
   for ( ; firstId < MAX_SENSORS; firstId++)
   {
-    if (sensorTab[firstId] != NULL)
+    if (sensorTab[firstId].isUsed)
       return firstId;
   }
   
@@ -250,7 +277,7 @@ boolean changeDataFrequencyById(int sid, int newFrequency)
   // Check if sensor exists. 
   if (!(isSensorExists(sid)))
     return false;
-  sensorTab[sid]->refreshDataFrequency = newFrequency * 1000;
+  sensorTab[sid].refreshDataFrequency = newFrequency * 1000;
   return true;
   
 }
@@ -262,7 +289,7 @@ boolean changeDataFrequencyById(int sid, int newFrequency)
  * sid          : Sensor ID.
  * newFrequency : New sensor refresh rate frequency.
  */ 
-boolean changeDataFrequencyByName(String sname, int newFrequency)
+boolean changeDataFrequencyByName(char* sname, int newFrequency)
 {
   return changeDataFrequencyById(getSensorByName(sname), newFrequency);
 }
@@ -277,7 +304,7 @@ boolean changeDataFrequencyByName(String sname, int newFrequency)
  */
 boolean isSensorExists(int sid)
 {
-  return ((sid < MAX_SENSORS) && (sid >= 0) && (sensorTab[sid] != NULL));
+  return ((sid < MAX_SENSORS) && (sid >= 0) && (sensorTab[sid].isUsed));
 }
 
 
@@ -286,23 +313,40 @@ boolean isSensorExists(int sid)
  */
 void clearTable()
 {
+  //Serial.println("I:|sensorRepository| entering in clearTable()");
   int i;
   for (i = 0; i < MAX_SENSORS; i++)
   {
-    sensorTab[i] = NULL;
+    if (sensorTab[i].isUsed)
+    {
+      sensorTab[i].isUsed = false;
+      //Serial.print("I:|sensorRepository| Sensor "); Serial.print(i); Serial.println(" deleted");
+    }
   }
+  //Serial.println("I:|sensorRepository| getting out of clearTable()");
 }
 
-boolean changeSensorStatus(String sname, int newStatus)
+
+/**
+ * Change the sensor status.
+ *
+ * sname     : Sensor name.
+ * newStatus : Sensor new status.
+ *
+ * return    : true if good execution, false otherwise.
+ */
+boolean changeSensorStatus(char* sname, int newStatus)
 {
   // Check is sensor exists
-  if(!(isSensorExists(getSensorByName(sname))))
+  int sid = getSensorByName(sname);
+  if (sid < 0)
     return false;
     
   // Update sensor status
-  sensorTab[getSensorByName(sname)]->isEnabled = newStatus;
+  sensorTab[sid].isEnabled = newStatus;
   return true;
 }
+
 
 /**
  * Update the next update time of the sensor.
@@ -312,27 +356,44 @@ boolean updateNextSensorTime(int sid)
   // Check if sensor exists.
   if (!(isSensorExists(sid)))
     return false;
- 
+   
   // Build the new sensor refresh frequency.
-  sensorTab[sid]->nextUpdateTime = millis() + sensorTab[sid]->refreshDataFrequency;
+  sensorTab[sid].nextUpdateTime += sensorTab[sid].refreshDataFrequency;
+   
+  // Check if long delay was accumulate.
+  long t = millis();
+  if ((t - sensorTab[sid].nextUpdateTime) > (5 * sensorTab[sid].refreshDataFrequency))
+  {
+     sensorTab[sid].nextUpdateTime = t + sensorTab[sid].refreshDataFrequency; 
+  }
+  
   return true;
 }
 
 
 /**
- * Get Arduino board time in seconds.
+ * Compute the delay of the next sensor to update.
  *
- * return : Arduino time in seconds.
  */
-int boardTime()
+int computeNextUpdateDelay()
 {
-  return millis();
+  long ctime = millis();
+  long ntime = ctime + 10000;
+  int i;
+  
+  // Search the next sensor update time.
+  for (i = 0; i < MAX_SENSORS; i++)
+  {
+    if ((sensorTab[i].isUsed) && (sensorTab[i].isEnabled > 0))
+    {
+      if (sensorTab[i].nextUpdateTime < ntime)
+        ntime = sensorTab[i].nextUpdateTime;    
+    }
+  }
+
+  // Compute delay.
+  int sdelay = ntime - ctime;
+  if (sdelay < 0)
+    sdelay = 0;
+  return sdelay;   
 }
-
-
-
-
-
-
-
-

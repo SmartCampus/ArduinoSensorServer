@@ -1,54 +1,99 @@
-#define BOARD_ID "42";
+/** Maximum delay of the main loop */
+#define MAX_LOOP_DELAY 1000
 
-/** Check if the setup is done or not */
-boolean initDone = false;
+/** Max size of the receiving buffer */
+#define COMMAND_BUFFER_LENGTH 100 
 
+/** Response buffer length */
+#define RESPONSE_BUFFER_LENGTH 200
+
+/** Arduino setup end message */
+#define SETUP_TERMINATED "I: Setup terminated\n\r"
+
+/** Command buffer */
+char command[COMMAND_BUFFER_LENGTH];
+
+/** Command response buffer */
+char result[RESPONSE_BUFFER_LENGTH];
 
 void setup()
 {
   Serial.begin(9600);
-  clearTable(); // Clear sensors table. 
-  Serial.println("I: Tab cleared.");
-  
-  if (!initDone)
-  {
-    Serial.println("I: Arduino setup finished.");
-    initDone = true;
-  } 
+  Serial.flush();
+  Serial.print(SETUP_TERMINATED); 
+  Serial.flush();
 }
 
 
 void loop()
-{  
-   // Character read by the serial. v
-  char character;
+{      
+  // Adaptative loop delay.
+  int loopDelay = MAX_LOOP_DELAY;
   
   // Check if something to read.
   if (Serial.available())
   {  
-    String content = ""; // Command to build.
-    while (Serial.available() > 0)
+    //Serial.println("I:|Main loop| Read the input command ...");
+    int cnx = 0;
+    int c = 0;
+    int nbEndInput = 0;
+    while (((c = Serial.read()) != '\n') && (c != '\r') && (cnx < COMMAND_BUFFER_LENGTH - 1))
     {
-      character = Serial.read();
-      content.concat(character);
+      if (c <= 0)
+      {
+        // Check excessive number of consecutive end input.
+        nbEndInput++; 
+        if (nbEndInput >= 10)
+          break;
+        delay(1);
+      }
+      else
+      {
+        nbEndInput = 0;
+        command[cnx++] = c;
+      }
     }
+    command[cnx] = 0;
+    if (cnx != 0)
+    {
+       Serial.println(command); Serial.flush();
     
-    // Execute the command.
-    // Serial.print("Received command : "); Serial.println(content);
-    Serial.println(execCommand(content));
+       // Execute the command.
+       result[0] = 0;
+       int resp = execCommand(command, result);
+    
+       Serial.print("R: "); 
+       Serial.print(resp);
+       Serial.print(" ");
+       if (result[0] != 0)
+       {
+         Serial.print(result);
+       }
+       else
+       {
+      /*if ((resp >= 0) && (resp < NB_RETURN_CODE))
+        Serial.print(RETURN_CODE_STRINGS[resp]);*/
+       }
+       Serial.print("\n");
+       Serial.flush();
+    }
+    // Set shorter delay to quickly process next command.
+    loopDelay = 10;
+  }
+  else
+  {
+    if (loopDelay < MAX_LOOP_DELAY)
+    {
+      loopDelay += 10;
+      if (loopDelay > MAX_LOOP_DELAY)
+        loopDelay = MAX_LOOP_DELAY;
+    }
   }
   
   // Update sensors data.
   queryAllSensors();
-  delay(1000);
-}
-
-
-/**
- * Get Board Unique ID (BUID)
- *
- * return Board ID
- */
-String getId(){
-    return BOARD_ID; 
+  int ndelay = computeNextUpdateDelay();
+  if (ndelay > loopDelay)
+    ndelay = loopDelay;
+  delay(ndelay);
 }
