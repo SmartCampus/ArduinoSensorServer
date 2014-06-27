@@ -40,8 +40,8 @@ void refreshSensorData(int sid)
      float value = 0;
      value = analogRead(getSensorPinNumber(sid));
      
-     // Print the data. JSON Format
-     printDataJson(getSensorName(sid), value, millis());  
+   // Print the data. JSON Format
+   printDataJson(getSensorName(sid), value, millis());  
    }
 }
 
