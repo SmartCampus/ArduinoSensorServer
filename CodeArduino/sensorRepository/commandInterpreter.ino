@@ -344,7 +344,7 @@ int execCommandSensorInfo(char* result)
  */
 int execCommandTimeStamp(char* result)
 {
-  sprintf(result, "Time:%ld", millis());
+  sprintf(result, "%ld", millis());
   return RETURN_OK;
 }
 
