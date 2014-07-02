@@ -16,11 +16,16 @@ char command[COMMAND_BUFFER_LENGTH];
 /** Command response buffer */
 char result[RESPONSE_BUFFER_LENGTH];
 
+void int2char(int a, char * result){
+  String str;
+  str = String(a);
+  str.toCharArray(result, 16);
+}
+
 void setup()
 {
   Serial.begin(9600);
-  Serial.flush();
-  Serial.print(SETUP_TERMINATED); 
+  comm.send(SETUP_TERMINATED); 
   Serial.flush();
 }
 
@@ -30,55 +35,36 @@ void loop()
   // Adaptative loop delay.
   int loopDelay = MAX_LOOP_DELAY;
   
+  char* got = comm.receive();
+  String received;
+  received = String(got);
+  Serial.flush();
   // Check if something to read.
-  if (Serial.available())
+  if (received != "")
   {  
-    //Serial.println("I:|Main loop| Read the input command ...");
-    int cnx = 0;
-    int c = 0;
-    int nbEndInput = 0;
-    while (((c = Serial.read()) != '\n') && (c != '\r') && (cnx < COMMAND_BUFFER_LENGTH - 1))
-    {
-      if (c <= 0)
-      {
-        // Check excessive number of consecutive end input.
-        nbEndInput++; 
-        if (nbEndInput >= 10)
-          break;
-        delay(1);
-      }
-      else
-      {
-        nbEndInput = 0;
-        command[cnx++] = c;
-      }
-    }
-    command[cnx] = 0;
-    if (cnx != 0)
-    {
-       Serial.println(command); Serial.flush();
-    
        // Execute the command.
        result[0] = 0;
-       int resp = execCommand(command, result);
-    
-       Serial.print("R: "); 
-       Serial.print(resp);
-       Serial.print(" ");
+       int resp = execCommand(got, result);
+
+	   // Conversion int->charArray
+   	   char respCharArray[16] = {0};
+   	   int2char(resp, respCharArray);
+
+       comm.send("R: "); 
+       comm.send(respCharArray);
+       comm.send(" ");
        if (result[0] != 0)
        {
-         Serial.print(result);
+         comm.send(result);
        }
        else
        {
       /*if ((resp >= 0) && (resp < NB_RETURN_CODE))
         Serial.print(RETURN_CODE_STRINGS[resp]);*/
        }
-       Serial.print("\n");
+       comm.send("\n");
        Serial.flush();
-    }
-    // Set shorter delay to quickly process next command.
-    loopDelay = 10;
+  
   }
   else
   {

@@ -1,4 +1,9 @@
 /*******************************************************************************************
+ * Define communication type
+ * #define {USE_XBEE | USE_SERIAL}
+ *******************************************************************************************/
+#define USE_SERIAL
+/*******************************************************************************************
  * Extern sensors libraries.
  * You can add new librairies for the sensors in this part.
  *******************************************************************************************/
@@ -11,7 +16,6 @@
 #define MAX_SENSORS 10 // Maximum number of sensor on an Arduino platform
 #define TOKEN_SIZE 30  // Max token size.  
 #define BOARD_ID "ARD_1_443"  // Board ID.
-
 
 /*******************************************************************************************
  * Sensor available types.
@@ -26,8 +30,26 @@ typedef enum
 }
 SENSOR_TYPE;
 
+
+
+
+
+/** Define communication libraries */
+#ifdef USE_SERIAL
+#include <SerialCommunication.h>
+SerialCommunication comm = SerialCommunication();
+#endif 
+
+#ifdef USE_XBEE
+#include <XBee.h>
+#include <XBeeCommunication.h>
+XBeeCommunication comm = XBeeCommunication();
+#endif
+
+
 /** Total number of sensor type */
 #define NB_SENSOR_TYPE 4
+
 
 /*******************************************************************************************
  *******************************************************************************************/

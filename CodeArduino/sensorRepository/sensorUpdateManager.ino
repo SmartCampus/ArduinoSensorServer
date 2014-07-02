@@ -54,18 +54,29 @@ void refreshSensorData(int sid)
 */
 void printDataJson(char* sensorName, int sensorValue, unsigned long timestamp)
 {
+  // Data conversion
+   char sensorValueChar[16];
+   String value;
+   value = String(sensorValue);
+   value.toCharArray(sensorValueChar, 16);
+
+   char timestampValueChar[32];
+   String value2;
+   value2 = String(timestamp);
+   value2.toCharArray(timestampValueChar, 32);
+   
+   
    // Start JSON
-   Serial.print("D: {");
+   comm.send("D: {");
    // Display sensor's name
-   Serial.print("n:"); Serial.print(sensorName); Serial.print(",");
+   comm.send("n:"); comm.send(sensorName);comm.send(",");
    // Display value
-   Serial.print("v:"); Serial.print(sensorValue); Serial.print(",");
+   comm.send("v:"); comm.send(sensorValueChar); comm.send(",");
    // Display timestamp
-   Serial.print("t:"); Serial.print(timestamp);
+   comm.send("t:"); comm.send(timestampValueChar);
    // Close JSON
-   Serial.print("}"); 
-   Serial.print("\n");
+   comm.send("}"); 
+   comm.send("\n");
    Serial.flush();
 }
-
 
