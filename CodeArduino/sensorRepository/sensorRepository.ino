@@ -10,7 +10,7 @@
 
 #define MAX_SENSORS 10 // Maximum number of sensor on an Arduino platform
 #define TOKEN_SIZE 30  // Max token size.  
-#define BOARD_ID "42"  // Board ID.
+#define BOARD_ID "ARD_1_443"  // Board ID.
 
 
 /*******************************************************************************************
@@ -51,6 +51,7 @@ SENSOR_DESCRIPTOR;
 
 /** Tab of sensors */
 SENSOR_DESCRIPTOR sensorTab[MAX_SENSORS];
+
 
 
 /**
@@ -465,3 +466,14 @@ int computeNextUpdateDelay()
     sdelay = 0;
   return sdelay;   
 }
+
+void(* reset) (void) = 0; 
+
+/**
+ * Reboot the Arduino platform
+ */
+void reboot(){
+ reset(); 
+}
+ 
+

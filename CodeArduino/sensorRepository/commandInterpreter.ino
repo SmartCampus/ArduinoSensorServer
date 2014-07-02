@@ -88,6 +88,9 @@ int execCommand(char* cmd, char* result)
   
   if (!strcmp(lastToken, "resume"))
     return execCommandResume(result);
+    
+  if (!strcmp(lastToken, "reboot"))
+    return execCommandReboot(result);
   
   // Unknown command.
   return RETURN_UKNOWNCMD; 
@@ -179,7 +182,6 @@ int isTypeAllowed(int type)
  * Commands list.
  * You can add command at the end of this section.
  *******************************************************************************************/
-
 
 /**
  * Add a sensor to the Arduino platform.
@@ -417,3 +419,17 @@ int execCommandBoardId(char* result)
   sprintf(result, "%s", BOARD_ID);
   return RETURN_OK;
 }
+
+/**
+ * Reboot the arduino board
+ *
+ * result : Result buffer to fill.
+ *
+ * return : exec return code.
+ */
+int execCommandReboot(char* result)
+{
+  reboot();
+  return RETURN_OK;
+}
+
