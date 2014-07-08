@@ -2,7 +2,7 @@
  * Define communication type
  * #define {USE_XBEE | USE_SERIAL}
  *******************************************************************************************/
-#define USE_SERIAL
+#define USE_XBEE
 /*******************************************************************************************
  * Extern sensors libraries.
  * You can add new librairies for the sensors in this part.

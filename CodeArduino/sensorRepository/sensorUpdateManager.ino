@@ -65,7 +65,7 @@ void printDataJson(char* sensorName, int sensorValue, unsigned long timestamp)
    value2 = String(timestamp);
    value2.toCharArray(timestampValueChar, 32);
    
-   
+
    // Start JSON
    comm.send("D: {");
    // Display sensor's name

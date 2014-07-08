@@ -92,6 +92,7 @@ int execCommand(char* cmd, char* result)
   if (!strcmp(lastToken, "reboot"))
     return execCommandReboot(result);
   
+    
   // Unknown command.
   return RETURN_UKNOWNCMD; 
 }

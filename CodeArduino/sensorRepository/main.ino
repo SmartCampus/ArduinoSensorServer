@@ -24,6 +24,9 @@ void int2char(int a, char * result){
 
 void setup()
 {
+  #ifdef USE_XBEE
+  pinMode(XBEE_WAKEUP, OUTPUT);
+  #endif
   Serial.begin(9600);
   comm.send(SETUP_TERMINATED); 
   Serial.flush();
@@ -45,22 +48,22 @@ void loop()
        // Execute the command.
        result[0] = 0;
        int resp = execCommand(got, result);
-
-	   // Conversion int->charArray
-   	   char respCharArray[16] = {0};
-   	   int2char(resp, respCharArray);
+       
+       // Conversion int->charArray
+       char respCharArray[16] = {0};
+       int2char(resp, respCharArray);
 
        comm.send("R: "); 
        comm.send(respCharArray);
        comm.send(" ");
+
        if (result[0] != 0)
        {
          comm.send(result);
        }
        else
        {
-      /*if ((resp >= 0) && (resp < NB_RETURN_CODE))
-        Serial.print(RETURN_CODE_STRINGS[resp]);*/
+      
        }
        comm.send("\n");
        Serial.flush();
