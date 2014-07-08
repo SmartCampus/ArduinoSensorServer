@@ -49,23 +49,21 @@ void loop()
        result[0] = 0;
        int resp = execCommand(got, result);
        
-       // Conversion int->charArray
-       char respCharArray[16] = {0};
-       int2char(resp, respCharArray);
-
-       comm.send("R: "); 
-       comm.send(respCharArray);
-       comm.send(" ");
+       String toSend = "R: ";
+       
 
        if (result[0] != 0)
        {
-         comm.send(result);
+         toSend += resp;
+         toSend += " ";
+         toSend += result;
        }
        else
        {
-      
+        toSend += resp;
        }
-       comm.send("\n");
+       
+       comm.sendln(toSend);
        Serial.flush();
   
   }
