@@ -8,7 +8,7 @@
 #ifndef XBeeCommunication_h
 #define XBeeCommunication_h
 
-#define XBEE_WAKEUP 13
+#define XBEE_WAKEUP 9
 #define COMMAND_BUFFER_LENGTH 100
 
 class XBeeCommunication
