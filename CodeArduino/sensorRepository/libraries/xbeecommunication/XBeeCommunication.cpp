@@ -46,10 +46,7 @@ void XBeeCommunication::send_internal(String msg)
            	}
 
 		}	
-	}
-	
-	
-	
+	}	
 }
 
 void XBeeCommunication::send(String msg)
@@ -58,21 +55,17 @@ void XBeeCommunication::send(String msg)
 	// Switch on XBee chip
 	digitalWrite(XBEE_WAKEUP, HIGH);
 
-	// Wait for XBee being fully operational
-	
-	delay(1000);
+	// Wait XBee for being fully operational
+	delay(100);
 	
 	// Send message	
 	send_internal(msg);
 	
-	
-	// Switch off XBee chip
-	digitalWrite(XBEE_WAKEUP, LOW);
-
-
-	
-	
+	if (msg.indexOf("\n" >= 0))
+		// Switch off XBee chip
+		digitalWrite(XBEE_WAKEUP, LOW);
 }
+
 char* XBeeCommunication::receive()
 {
 	char command[COMMAND_BUFFER_LENGTH] = {0};
