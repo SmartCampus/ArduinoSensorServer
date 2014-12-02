@@ -1,0 +1,15 @@
+#include <Wire.h>
+
+#include <rgb_lcd.h>
+#include <GroveDebug.h>
+
+Debug debug = Debug();
+
+void setup(){
+ debug.init();
+
+}
+
+void loop(){
+   debug.print(0, "Message!");
+}
