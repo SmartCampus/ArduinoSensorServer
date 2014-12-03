@@ -37,5 +37,4 @@ void Debug::print(int level, char * msg)
 	lcd.clear(); // Clear message
 	lcd.home(); // Set cursor to top left corner
 	lcd.print(msg);
-	delay(500);
 }

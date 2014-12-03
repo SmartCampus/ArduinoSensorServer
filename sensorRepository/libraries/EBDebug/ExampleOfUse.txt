@@ -1,7 +1,7 @@
 #include <LiquidCrystal.h>
 #include <EBDebug.h>
 
-Debug debug = Debug();
+EBDebug debug = EBDebug();
 
 void setup(){
   debug.init();

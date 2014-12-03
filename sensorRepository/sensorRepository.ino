@@ -1,13 +1,22 @@
 /*******************************************************************************************
+ * Activate/Desactivate LCD Screen
+ * #define DEBUG {0|1}
+ *******************************************************************************************/
+#define DEBUG 1
+
+/*******************************************************************************************
+ * Define LCD Screen Manufacter
+ *******************************************************************************************/
+#define EB_DEBUG
+/*******************************************************************************************
  * Define communication type
  * #define {USE_XBEE | USE_SERIAL}
  *******************************************************************************************/
-#define USE_XBEE
+#define USE_SERIAL
 /*******************************************************************************************
  * Extern sensors libraries.
  * You can add new librairies for the sensors in this part.
  *******************************************************************************************/
-
 #include "Ultrasonic.h"
 
 /*******************************************************************************************
@@ -15,7 +24,7 @@
 
 #define MAX_SENSORS 10 // Maximum number of sensor on an Arduino platform
 #define TOKEN_SIZE 30  // Max token size.  
-#define BOARD_ID "ARD_1_443"  // Board ID.
+#define BOARD_ID "ARD_1_442"  // Board ID.
 
 /*******************************************************************************************
  * Sensor available types.
@@ -33,7 +42,6 @@ SENSOR_TYPE;
 
 
 
-
 /** Define communication libraries */
 #ifdef USE_SERIAL
 #include <SerialCommunication.h>
@@ -45,6 +53,16 @@ SerialCommunication comm = SerialCommunication();
 #include <XBeeCommunication.h>
 XBeeCommunication comm = XBeeCommunication();
 #endif
+
+#ifdef EB_DEBUG
+#if DEBUG == 1
+#include <LiquidCrystal.h>
+#include <EBDebug.h>
+EBDebug debug = EBDebug();
+#endif
+#endif
+
+
 
 
 /** Total number of sensor type */

@@ -64,7 +64,10 @@ void printDataJson(char* sensorName, int sensorValue, unsigned long timestamp)
    String value2;
    value2 = String(timestamp);
    value2.toCharArray(timestampValueChar, 32);
-   
+   #if DEBUG == 1
+   debug.print(0, sensorName);
+   debug.print(0, sensorValueChar);
+   #endif
    #ifdef USE_XBEE 
    comm.send(" ");
    #endif

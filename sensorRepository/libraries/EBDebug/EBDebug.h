@@ -1,17 +1,17 @@
 /*
-	DEBUG Library - Display information on a LCD Screen
+	Debug Library - Display information on a LCD Screen
 */
 
 #include <Arduino.h>
 
-#ifndef Debug_h
-#define Debug_h
+#ifndef EBDebug_h
+#define EBDebug_h
 
-class Debug
+class EBDebug
 {
 	public:
-		Debug();
-		/* Print a debug message
+		EBDebug();
+		/* Print a Debug message
 		   Level (int): 0 (info), 1 (warning), 2 (error)
 		   msg (char *): message
 		*/

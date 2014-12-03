@@ -1,16 +1,16 @@
 /*
-	DEBUG Library - Display information on a LCD Screen
+	GroveDebug Library - Display information on a LCD Screen
 */
 
 #include <Arduino.h>
 
-#ifndef Debug_h
-#define Debug_h
+#ifndef GroveDebug_h
+#define GroveDebug_h
 
-class Debug
+class GroveDebug
 {
 	public:
-		Debug();
+		GroveDebug();
 		/* Print a debug message
 		   Level (int): 0 (info), 1 (warning), 2 (error)
 		   msg (char *): message

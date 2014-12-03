@@ -3,7 +3,7 @@
 #include <rgb_lcd.h>
 #include <GroveDebug.h>
 
-Debug debug = Debug();
+GroveDebug debug = GroveDebug();
 
 void setup(){
  debug.init();

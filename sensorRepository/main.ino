@@ -10,6 +10,8 @@
 /** Arduino setup end message */
 #define SETUP_TERMINATED "I: Setup terminated\n\r"
 
+#define SMARTCAMPUSOS "SmartCampusOS v2"
+
 /** Command buffer */
 char command[COMMAND_BUFFER_LENGTH];
 
@@ -24,6 +26,9 @@ void int2char(int a, char * result){
 
 void setup()
 {
+  #if DEBUG == 1
+  debug.init();
+  #endif
   #ifdef USE_XBEE
   pinMode(XBEE_WAKEUP, OUTPUT);
   #endif
@@ -41,10 +46,18 @@ void loop()
   char* got = comm.receive();
   String received;
   received = String(got);
+ 
+  #if DEBUG == 1
+  debug.print(0, SMARTCAMPUSOS);
+  #endif
+  
   Serial.flush();
   // Check if something to read.
   if (received != "")
   {  
+       #if DEBUG == 1
+       debug.print(0, got);
+       #endif
        // Execute the command.
        result[0] = 0;
        int resp = execCommand(got, result);
@@ -62,9 +75,16 @@ void loop()
        {
         toSend += resp;
        }
-       
-       comm.sendln(toSend);
-       Serial.flush();
+       #if DEBUG == 1
+       /* LCD Display */
+       char dbgmessage[80];
+       toSend.toCharArray(dbgmessage,80);
+       debug.print(0, dbgmessage);
+       /* **** */
+       #endif
+        
+       comm.send(toSend + '\n');
+      
   
   }
   else

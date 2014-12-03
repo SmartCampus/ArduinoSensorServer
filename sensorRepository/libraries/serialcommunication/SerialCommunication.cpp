@@ -10,13 +10,15 @@ SerialCommunication::SerialCommunication()
 		
 void SerialCommunication::send(String msg)
 {
-	Serial.print(msg);	
+    for (int i = 0; i < msg.length(); i++)
+        Serial.write(msg[i]);
 	
 }
 
 void SerialCommunication::sendln(String msg)
 {
-	Serial.println(msg);	
+    // NOT IMPLEMENTED
+    //	Serial.println(msg);
 	
 }
 
